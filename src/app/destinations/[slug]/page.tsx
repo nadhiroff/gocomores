@@ -17,11 +17,16 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { formatAverage, formatDate } from "@/lib/format";
 import { islandLetter } from "@/lib/islands";
-import { getPlaceBySlug, getReviewStats, listReviews } from "@/lib/queries";
+import { getAllPlaceSlugs, getPlaceBySlug, getReviewStats, listReviews } from "@/lib/queries";
 import { SITE } from "@/lib/site";
 import type { PracticalInfo } from "@/lib/types";
 
-export const dynamic = "force-dynamic";
+// Pages générées puis mises en cache 5 min ; l'admin et les nouveaux avis les régénèrent aussitôt (revalidatePath).
+export const revalidate = 300;
+
+export async function generateStaticParams() {
+  return (await getAllPlaceSlugs()).map((p) => ({ slug: p.slug }));
+}
 
 type Params = Promise<{ slug: string }>;
 

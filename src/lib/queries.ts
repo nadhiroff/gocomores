@@ -1,4 +1,5 @@
 import { cache } from "react";
+import { unstable_cache } from "next/cache";
 import { prisma } from "@/lib/db";
 import {
   parsePractical,
@@ -63,7 +64,8 @@ export async function listPlaces(filters: PlaceFilters = {}, take?: number): Pro
   return (rows as unknown[]).map(toCard);
 }
 
-export async function getPlaceBySlug(slug: string): Promise<PlaceDetail | null> {
+// cache() : generateMetadata et la page lisent le même lieu sans doubler la requête.
+export const getPlaceBySlug = cache(async (slug: string): Promise<PlaceDetail | null> => {
   const row = await prisma.place.findUnique({
     where: { slug },
     include: { ...placeInclude, images: { orderBy: { order: "asc" } } },
@@ -80,7 +82,7 @@ export async function getPlaceBySlug(slug: string): Promise<PlaceDetail | null> 
     practical: parsePractical(r.practicalInfo),
     images: r.images.map((i) => ({ id: i.id, url: i.url, alt: i.alt, order: i.order })),
   };
-}
+});
 
 export async function getAllPlaceSlugs(): Promise<{ slug: string; updatedAt: Date }[]> {
   const rows = await prisma.place.findMany({ select: { slug: true, updatedAt: true } });
@@ -139,10 +141,21 @@ export async function listReviews(opts: { page?: number; perPage?: number; place
   };
 }
 
+export const ALERT_TAG = "site-alert";
+
+// Affiché sur toutes les pages : mis en cache entre les requêtes, invalidé dès que l'admin modifie le bandeau.
+const cachedAlert = unstable_cache(
+  async () => {
+    const row = await prisma.siteAlert.findFirst({ where: { active: true }, orderBy: { id: "desc" }, select: { id: true, message: true, link: true } });
+    return row as unknown as { id: number; message: string; link: string | null } | null;
+  },
+  ["active-alert"],
+  { tags: [ALERT_TAG], revalidate: 600 },
+);
+
 export async function getActiveAlert() {
   try {
-    const row = await prisma.siteAlert.findFirst({ where: { active: true }, orderBy: { id: "desc" } });
-    return row as unknown as { id: number; message: string; link: string | null } | null;
+    return await cachedAlert();
   } catch {
     return null; // le site reste utilisable même si la base est indisponible
   }
