@@ -168,6 +168,10 @@
     color: #0c4a6e;
     background-color: #ffffff;
   }
+  /* Voir ScrollHoverGuard : pas d'effets de survol pendant le défilement. */
+  html[data-scrolling] body {
+    pointer-events: none;
+  }
   :focus-visible {
     outline: 3px solid var(--ring);
     outline-offset: 2px;
