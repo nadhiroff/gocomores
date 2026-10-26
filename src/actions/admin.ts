@@ -29,7 +29,7 @@ export async function logout() {
 }
 
 function revalidateAll(slug?: string) {
-  for (const p of ["/", "/destinations", "/carte", "/avis", "/sitemap.xml"]) revalidatePath(p);
+  for (const p of ["/", "/destinations", "/carte", "/avis", "/sitemap.xml", "/admin", "/admin/lieux", "/admin/medias"]) revalidatePath(p);
   if (slug) revalidatePath(`/destinations/${slug}`);
 }
 
@@ -69,7 +69,6 @@ export async function savePlace(id: number | null, _prev: FormState, fd: FormDat
     googleMapsUrl: d.googleMapsUrl || `https://www.google.com/maps/search/?api=1&query=${d.lat},${d.lng}`,
     status: d.status,
     verifiedAt,
-    coverAlt: d.coverAlt || null,
     islandId: d.islandId,
     categoryId: d.categoryId,
   };
@@ -79,10 +78,9 @@ export async function savePlace(id: number | null, _prev: FormState, fd: FormDat
 
   // Photos téléversées : validées par leur contenu réel.
   const files = fd.getAll("photos").filter((f): f is File => f instanceof File && f.size > 0).slice(0, 8);
-  const alt = String(fd.get("photoAlt") ?? "").trim().slice(0, 300);
-  if (files.length && !alt) return { ok: false, errors: { photoAlt: ["Texte alternatif obligatoire pour les photos."] }, message: "Ajoutez un texte alternatif décrivant la photo." };
-  const existing = await prisma.placeImage.count({ where: { placeId } });
-  let order = existing;
+  // Sans description fournie, le nom du lieu sert de texte alternatif (modifiable ensuite photo par photo).
+  const alt = String(fd.get("photoAlt") ?? "").trim().slice(0, 300) || d.name;
+  let order = (await prisma.placeImage.count({ where: { placeId } })) as number;
   const problems: string[] = [];
   for (const file of files) {
     const res = await saveImage(file);
@@ -91,8 +89,8 @@ export async function savePlace(id: number | null, _prev: FormState, fd: FormDat
       continue;
     }
     await prisma.placeImage.create({ data: { placeId, url: res.url, alt, order: order++ } });
-    if (existing === 0 && order === 1) await prisma.place.update({ where: { id: placeId }, data: { coverImage: res.url, coverAlt: d.coverAlt || alt } });
   }
+  if (files.length) await syncCover(placeId);
 
   revalidateAll(slug);
   if (problems.length) return { ok: false, errors: { photos: problems }, message: "Lieu enregistré, mais certaines photos ont été refusées." };
@@ -106,22 +104,77 @@ export async function deletePlace(formData: FormData) {
   if (!Number.isInteger(id)) return;
   await prisma.place.delete({ where: { id } });
   revalidateAll();
-  redirect("/admin");
+  redirect("/admin/lieux");
 }
 
-export async function deletePlaceImage(formData: FormData) {
+/* ───────────── Médiathèque : photos des lieux ───────────── */
+
+export interface ImageActionResult {
+  ok: boolean;
+  error?: string;
+  image?: { id: number; url: string; alt: string; order: number };
+}
+
+async function placeSlug(placeId: number) {
+  return ((await prisma.place.findUnique({ where: { id: placeId }, select: { slug: true } })) as { slug: string } | null)?.slug;
+}
+
+/** La couverture d'un lieu est toujours sa première photo : on la resynchronise après chaque changement. */
+async function syncCover(placeId: number) {
+  const first = (await prisma.placeImage.findFirst({ where: { placeId }, orderBy: [{ order: "asc" }, { id: "asc" }] })) as { url: string; alt: string } | null;
+  await prisma.place.update({ where: { id: placeId }, data: { coverImage: first?.url ?? null, coverAlt: first?.alt ?? null } });
+  const slug = await placeSlug(placeId);
+  revalidateAll(slug);
+  revalidatePath(`/admin/lieux/${placeId}`);
+}
+
+/** Téléverse UNE photo (le client envoie les fichiers un par un pour afficher la progression). */
+export async function uploadPlaceImage(fd: FormData): Promise<ImageActionResult> {
+  await requireAdmin();
+  const placeId = Number(fd.get("placeId"));
+  const file = fd.get("photo");
+  if (!Number.isInteger(placeId) || !(file instanceof File)) return { ok: false, error: "Requête invalide." };
+  const place = (await prisma.place.findUnique({ where: { id: placeId }, select: { name: true } })) as { name: string } | null;
+  if (!place) return { ok: false, error: "Lieu introuvable." };
+  const res = await saveImage(file);
+  if ("error" in res) return { ok: false, error: res.error };
+  const alt = String(fd.get("alt") ?? "").replace(/<[^>]*>/g, "").trim().slice(0, 300) || place.name;
+  const last = (await prisma.placeImage.findFirst({ where: { placeId }, orderBy: { order: "desc" }, select: { order: true } })) as { order: number } | null;
+  const image = (await prisma.placeImage.create({ data: { placeId, url: res.url, alt, order: (last?.order ?? -1) + 1 } })) as { id: number; url: string; alt: string; order: number };
+  await syncCover(placeId);
+  return { ok: true, image: { id: image.id, url: image.url, alt: image.alt, order: image.order } };
+}
+
+export async function updatePlaceImageAlt(fd: FormData): Promise<ImageActionResult> {
+  await requireAdmin();
+  const id = Number(fd.get("id"));
+  const alt = String(fd.get("alt") ?? "").replace(/<[^>]*>/g, "").trim().slice(0, 300);
+  if (!Number.isInteger(id)) return { ok: false, error: "Requête invalide." };
+  if (alt.length < 3) return { ok: false, error: "Description : 3 caractères minimum." };
+  const img = (await prisma.placeImage.update({ where: { id }, data: { alt } })) as { placeId: number };
+  await syncCover(img.placeId);
+  return { ok: true };
+}
+
+/** Enregistre un nouvel ordre ; la première photo devient la couverture. */
+export async function reorderPlaceImages(placeId: number, ids: number[]): Promise<ImageActionResult> {
+  await requireAdmin();
+  if (!Number.isInteger(placeId) || !ids.every(Number.isInteger)) return { ok: false, error: "Requête invalide." };
+  const owned = (await prisma.placeImage.findMany({ where: { placeId }, select: { id: true } })) as { id: number }[];
+  const ownedIds = new Set(owned.map((o) => o.id));
+  if (ids.length !== ownedIds.size || !ids.every((id) => ownedIds.has(id))) return { ok: false, error: "La liste des photos a changé, rechargez la page." };
+  await prisma.$transaction(ids.map((id, order) => prisma.placeImage.update({ where: { id }, data: { order } })));
+  await syncCover(placeId);
+  return { ok: true };
+}
+
+export async function deletePlaceImage(formData: FormData): Promise<ImageActionResult> {
   await requireAdmin();
   const id = Number(formData.get("id"));
-  const placeId = Number(formData.get("placeId"));
-  if (!Number.isInteger(id)) return;
-  await prisma.placeImage.delete({ where: { id } });
-  const first = await prisma.placeImage.findFirst({ where: { placeId }, orderBy: { order: "asc" } });
-  await prisma.place.update({
-    where: { id: placeId },
-    data: { coverImage: (first as { url: string } | null)?.url ?? null, coverAlt: (first as { alt: string } | null)?.alt ?? null },
-  });
-  revalidateAll();
-  revalidatePath(`/admin/lieux/${placeId}`);
+  if (!Number.isInteger(id)) return { ok: false, error: "Requête invalide." };
+  const img = (await prisma.placeImage.delete({ where: { id } })) as { placeId: number };
+  await syncCover(img.placeId);
+  return { ok: true };
 }
 
 export async function deleteReview(formData: FormData) {

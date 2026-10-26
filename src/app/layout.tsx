@@ -3,6 +3,7 @@ import { ThemeProvider } from "next-themes";
 import { Header } from "@/components/site/header";
 import { Footer } from "@/components/site/footer";
 import { SafetyBanner } from "@/components/site/safety-banner";
+import { SiteChrome } from "@/components/site/site-chrome";
 import { SITE } from "@/lib/site";
 import "./globals.css";
 
@@ -43,14 +44,11 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           >
             Aller au contenu
           </a>
-          <Header />
-          <main id="contenu" tabIndex={-1} className="focus:outline-none">
-            {children}
-          </main>
-          <Footer />
-          {/* Réserve la hauteur du bandeau fixe pour qu'il ne masque jamais le pied de page. */}
-          <div aria-hidden="true" className="h-24 sm:h-16" />
-          <SafetyBanner />
+          <SiteChrome header={<Header />} footer={<Footer />} banner={<SafetyBanner />}>
+            <main id="contenu" tabIndex={-1} className="focus:outline-none">
+              {children}
+            </main>
+          </SiteChrome>
         </ThemeProvider>
       </body>
     </html>

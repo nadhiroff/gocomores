@@ -10,6 +10,8 @@ const securityHeaders = [
 
 const nextConfig: NextConfig = {
   poweredByHeader: false,
+  // Les photos passent par des Server Actions (1 Mo par défaut) : 5 Mo par image, jusqu'à 8 images à la création d'un lieu.
+  experimental: { serverActions: { bodySizeLimit: "45mb" } },
   images: {
     formats: ["image/avif", "image/webp"],
     deviceSizes: [360, 640, 828, 1080, 1280, 1600],

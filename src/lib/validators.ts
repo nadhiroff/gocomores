@@ -54,11 +54,20 @@ export const alertSchema = z.object({
   active: z.coerce.boolean().optional(),
 });
 
+// Champ vide → undefined (sinon z.coerce transformerait "" en 0).
+const blankToUndefined = (v: unknown) => (v === "" || v === null ? undefined : v);
+
 const optionalNumber = (label: string, min: number, max: number) =>
-  z.coerce
-    .number({ invalid_type_error: `${label} : nombre attendu.` })
-    .min(min, `${label} : minimum ${min}.`)
-    .max(max, `${label} : maximum ${max}.`);
+  z.preprocess(
+    blankToUndefined,
+    z.coerce
+      .number({ invalid_type_error: `${label} : nombre attendu.` })
+      .min(min, `${label} : minimum ${min}.`)
+      .max(max, `${label} : maximum ${max}.`),
+  );
+
+const requiredId = (label: string) =>
+  z.preprocess(blankToUndefined, z.coerce.number({ invalid_type_error: `${label} : champ requis.` }).int().positive(`${label} : champ requis.`));
 
 export const placeSchema = z.object({
   name: text(2, 200, "Nom"),
@@ -69,8 +78,8 @@ export const placeSchema = z.object({
     .regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/, "Slug : minuscules, chiffres et tirets uniquement.")
     .optional()
     .or(z.literal("")),
-  islandId: z.coerce.number().int().positive("Île : champ requis."),
-  categoryId: z.coerce.number().int().positive("Catégorie : champ requis."),
+  islandId: requiredId("Île"),
+  categoryId: requiredId("Catégorie"),
   summary: text(10, 400, "Résumé"),
   history: text(10, 8000, "Histoire"),
   lat: optionalNumber("Latitude", -90, 90),
