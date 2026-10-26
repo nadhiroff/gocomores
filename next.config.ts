@@ -14,6 +14,8 @@ const nextConfig: NextConfig = {
   experimental: { serverActions: { bodySizeLimit: "45mb" } },
   images: {
     formats: ["image/avif", "image/webp"],
+    // Photos Wikimedia Commons référencées directement (licences libres, crédits sur /credits-photos).
+    remotePatterns: [{ protocol: "https", hostname: "upload.wikimedia.org", pathname: "/wikipedia/commons/**" }],
     deviceSizes: [360, 640, 828, 1080, 1280, 1600],
   },
   async headers() {

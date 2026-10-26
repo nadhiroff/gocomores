@@ -42,6 +42,9 @@ const CATEGORIES = [
   { slug: "volcan", name: "Volcan", icon: "Flame" },
 ];
 
+const WIKIMEDIA = "https://upload.wikimedia.org/";
+const imageUrl = (g: { file?: string; url?: string }) => g.url ?? `/images/places/${g.file}.jpg`;
+
 const VERIFIED_AT = new Date("2026-10-10T00:00:00.000Z");
 
 interface SeedPlace {
@@ -57,8 +60,9 @@ interface SeedPlace {
   status: "VERIFIED" | "TO_CONFIRM";
   /** Date de vérification si différente de VERIFIED_AT. */
   verifiedOn?: string;
-  /** La première photo sert de couverture. Vide : un visuel aux couleurs de l'île s'affiche. */
-  gallery: { file: string; alt: string }[];
+  /** La première photo sert de couverture. Vide : un visuel aux couleurs de l'île s'affiche.
+   *  `file` : photo locale dans public/images/places ; `url` : fichier Wikimedia Commons. */
+  gallery: { file?: string; url?: string; alt: string }[];
 }
 
 const SEED_PLACES: SeedPlace[] = [
@@ -317,7 +321,10 @@ const SEED_PLACES: SeedPlace[] = [
     lng: 43.23258,
     status: "VERIFIED",
     verifiedOn: "2026-10-27",
-    gallery: [],
+    gallery: [
+      { url: "https://upload.wikimedia.org/wikipedia/commons/8/8a/Palais_de_Kaviridjeo_%2810996096686%29.jpg", alt: "Ruines du palais de Kaviridjeo, ancien siège des sultans du Bambao à Ikoni" },
+      { url: "https://upload.wikimedia.org/wikipedia/commons/d/d2/Grande_Comore-Iconi-Ancienne_capitale.jpg", alt: "Carte postale ancienne d'Ikoni, ancienne capitale de Grande Comore (vers 1928)" },
+    ],
   },
   {
     slug: "medina-itsandra",
@@ -338,7 +345,7 @@ const SEED_PLACES: SeedPlace[] = [
     lng: 43.26465,
     status: "VERIFIED",
     verifiedOn: "2026-10-27",
-    gallery: [],
+    gallery: [{ url: "https://upload.wikimedia.org/wikipedia/commons/thumb/7/71/Moroni_beach.jpg/1280px-Moroni_beach.jpg", alt: "La plage d'Itsandra, au pied de la vieille ville, près de Moroni" }],
   },
   {
     slug: "medina-ntsoudjini",
@@ -379,7 +386,7 @@ const SEED_PLACES: SeedPlace[] = [
     lat: -11.70324,
     lng: 43.25558,
     status: "TO_CONFIRM",
-    gallery: [],
+    gallery: [{ url: "https://upload.wikimedia.org/wikipedia/commons/0/00/Musee_des_Comores_%2810842842534%29.jpg", alt: "Le bâtiment du Musée national des Comores à Moroni" }],
   },
   {
     slug: "trou-du-prophete",
@@ -459,7 +466,10 @@ const SEED_PLACES: SeedPlace[] = [
     lat: -12.28,
     lng: 43.7425,
     status: "TO_CONFIRM",
-    gallery: [],
+    gallery: [
+      { url: "https://upload.wikimedia.org/wikipedia/commons/thumb/6/6b/Fomboni-Ship.jpg/1280px-Fomboni-Ship.jpg", alt: "Le navire « Île de Mohéli » à quai dans le port de Fomboni" },
+      { url: "https://upload.wikimedia.org/wikipedia/commons/5/5e/Queen_of_Moh%C3%A9li.jpg", alt: "Gravure de 1863 : la reine de Mohéli recevant une délégation française" },
+    ],
   },
 ];
 
@@ -486,6 +496,7 @@ async function main() {
 
   const overwrite = process.env.SEED_OVERWRITE === "1";
   let skipped = 0;
+  let photosAdded = 0;
   for (const p of SEED_PLACES) {
     const data = {
       name: p.name,
@@ -497,14 +508,22 @@ async function main() {
       googleMapsUrl: `https://www.google.com/maps/search/?api=1&query=${p.lat},${p.lng}`,
       status: p.status,
       verifiedAt: p.status === "VERIFIED" ? (p.verifiedOn ? new Date(`${p.verifiedOn}T00:00:00.000Z`) : VERIFIED_AT) : null,
-      coverImage: p.gallery.length ? `/images/places/${p.gallery[0].file}.jpg` : null,
+      coverImage: p.gallery.length ? imageUrl(p.gallery[0]) : null,
       coverAlt: p.gallery[0]?.alt ?? null,
       islandId: islandId(p.island),
       categoryId: categoryId(p.category),
     };
     // Un lieu déjà présent (peut-être modifié depuis l'admin) n'est pas écrasé, sauf SEED_OVERWRITE=1.
-    const existing = await prisma.place.findUnique({ where: { slug: p.slug }, select: { id: true } });
+    // Seule exception : s'il n'a encore aucune photo, on lui ajoute celles du seed.
+    const existing = (await prisma.place.findUnique({ where: { slug: p.slug }, select: { id: true, _count: { select: { images: true } } } })) as
+      | { id: number; _count: { images: number } }
+      | null;
     if (existing && !overwrite) {
+      if (existing._count.images === 0 && p.gallery.length) {
+        await prisma.placeImage.createMany({ data: p.gallery.map((g, idx) => ({ placeId: existing.id, url: imageUrl(g), alt: g.alt, order: idx })) });
+        await prisma.place.update({ where: { id: existing.id }, data: { coverImage: imageUrl(p.gallery[0]), coverAlt: p.gallery[0].alt } });
+        photosAdded++;
+      }
       skipped++;
       continue;
     }
@@ -514,12 +533,12 @@ async function main() {
       create: { slug: p.slug, ...data },
     });
     await prisma.placeImage.deleteMany({
-      where: { placeId: place.id, url: { startsWith: "/images/places/" } },
+      where: { placeId: place.id, OR: [{ url: { startsWith: "/images/places/" } }, { url: { startsWith: WIKIMEDIA } }] },
     });
     await prisma.placeImage.createMany({
       data: p.gallery.map((g, idx) => ({
         placeId: place.id,
-        url: `/images/places/${g.file}.jpg`,
+        url: imageUrl(g),
         alt: g.alt,
         order: idx,
       })),
@@ -538,7 +557,7 @@ async function main() {
   }
 
   console.log(
-    `Seed terminé : ${ISLANDS.length} îles, ${CATEGORIES.length} catégories, ${SEED_PLACES.length - skipped} lieux ajoutés ou mis à jour, ${skipped} déjà présents conservés.`,
+    `Seed terminé : ${ISLANDS.length} îles, ${CATEGORIES.length} catégories, ${SEED_PLACES.length - skipped} lieux ajoutés ou mis à jour, ${skipped} déjà présents conservés (photos ajoutées à ${photosAdded} d'entre eux).`,
   );
 }
 
