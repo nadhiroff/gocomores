@@ -1,11 +1,12 @@
 "use server";
 
-import { revalidatePath } from "next/cache";
+import { revalidatePath, revalidateTag } from "next/cache";
 import { redirect } from "next/navigation";
 import { AuthError } from "next-auth";
 import { signIn, signOut } from "@/auth";
 import { requireAdmin } from "@/lib/admin";
 import { prisma } from "@/lib/db";
+import { ALERT_TAG } from "@/lib/queries";
 import { saveImage } from "@/lib/uploads";
 import { slugify } from "@/lib/utils";
 import bcrypt from "bcryptjs";
@@ -102,8 +103,9 @@ export async function deletePlace(formData: FormData) {
   await requireAdmin();
   const id = Number(formData.get("id"));
   if (!Number.isInteger(id)) return;
-  await prisma.place.delete({ where: { id } });
-  revalidateAll();
+  // La fiche publique est mise en cache : on récupère le slug pour l'invalider aussi.
+  const deleted = (await prisma.place.delete({ where: { id } })) as { slug: string };
+  revalidateAll(deleted.slug);
   redirect("/admin/lieux");
 }
 
@@ -203,6 +205,7 @@ export async function saveAlert(_prev: FormState, fd: FormData): Promise<FormSta
   const data = { message, link: link || null, active: !!active };
   if (current) await prisma.siteAlert.update({ where: { id: (current as { id: number }).id }, data });
   else await prisma.siteAlert.create({ data });
+  revalidateTag(ALERT_TAG);
   revalidatePath("/", "layout");
   return { ok: true, message: "Bandeau mis à jour." };
 }

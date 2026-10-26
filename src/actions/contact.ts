@@ -1,5 +1,6 @@
 "use server";
 
+import { after } from "next/server";
 import { prisma } from "@/lib/db";
 import { getClientIp, hashIp } from "@/lib/ip";
 import { sendContactMail } from "@/lib/mail";
@@ -24,8 +25,11 @@ export async function submitContact(_prev: FormState, formData: FormData): Promi
       return { ok: false, errors: { form: [msg] }, message: msg };
     }
     // Stockage d'abord : le message n'est jamais perdu, même si le SMTP est indisponible.
-    await prisma.contactMessage.create({ data: { ...parsed.data, ipHash } });
-    await sendContactMail(parsed.data);
+    // Champs explicites : le pot de miel « website » n'est pas une colonne (Prisma refuserait l'enregistrement).
+    const { name, email, subject, message } = parsed.data;
+    await prisma.contactMessage.create({ data: { name, email, subject, message, ipHash } });
+    // L'e-mail part après la réponse : le visiteur n'attend pas le serveur SMTP.
+    after(() => sendContactMail({ name, email, subject, message }));
     return { ok: true, message: "Merci, votre message est bien parti. Réponse sous 24 à 48 h." };
   } catch (e) {
     console.error("submitContact", e);
