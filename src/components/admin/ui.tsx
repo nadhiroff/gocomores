@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { ChevronRight } from "lucide-react";
+import { CountUp } from "@/components/site/count-up";
 import { cn } from "@/lib/utils";
 
 /** En-tête de page admin : fil d'Ariane, titre, description et actions. */
@@ -68,19 +69,19 @@ export type Tone = keyof typeof TONES;
 export function StatCard({ label, value, icon: Icon, tone, href, hint }: { label: string; value: number | string; icon: React.ComponentType<{ className?: string }>; tone: Tone; href?: string; hint?: string }) {
   const body = (
     <>
-      <span className={cn("grid size-11 shrink-0 place-items-center rounded-xl", TONES[tone])}>
+      <span className={cn("grid size-11 shrink-0 place-items-center rounded-xl transition-transform duration-300 group-hover:-rotate-6 group-hover:scale-110", TONES[tone])}>
         <Icon className="size-5" aria-hidden="true" />
       </span>
       <span className="min-w-0">
         <span className="block text-sm font-medium text-muted-foreground">{label}</span>
-        <span className="block text-2xl font-bold tabular-nums">{value}</span>
+        <span className="block text-2xl font-bold tabular-nums">{typeof value === "number" ? <CountUp value={value} duration={900} /> : value}</span>
         {hint && <span className="block text-xs text-muted-foreground">{hint}</span>}
       </span>
     </>
   );
-  const cls = "flex items-center gap-4 rounded-2xl border bg-card p-5 shadow-[0_1px_2px_rgb(0_0_0/0.04)]";
+  const cls = "group flex items-center gap-4 rounded-2xl border bg-card p-5 shadow-[0_1px_2px_rgb(0_0_0/0.04)]";
   return href ? (
-    <Link href={href} className={cn(cls, "transition-colors hover:border-primary/60 hover:bg-accent/40")}>{body}</Link>
+    <Link href={href} className={cn(cls, "admin-lift hover:border-primary/60")}>{body}</Link>
   ) : (
     <div className={cls}>{body}</div>
   );

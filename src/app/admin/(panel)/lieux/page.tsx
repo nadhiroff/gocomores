@@ -5,6 +5,7 @@ import { PlaceImage } from "@/components/site/place-image";
 import { Button } from "@/components/ui/button";
 import { Input, NativeSelect } from "@/components/ui/input";
 import { prisma } from "@/lib/db";
+import { islandColor } from "@/lib/island-colors";
 import { getCategories, getIslands } from "@/lib/queries";
 
 export const dynamic = "force-dynamic";
@@ -12,7 +13,7 @@ export const metadata = { title: "Admin — Lieux" };
 
 type Row = {
   id: number; slug: string; name: string; status: "VERIFIED" | "TO_CONFIRM"; coverImage: string | null; coverAlt: string | null; updatedAt: Date;
-  island: { localName: string; color: string }; category: { name: string }; _count: { images: number };
+  island: { slug: string; localName: string; color: string }; category: { name: string }; _count: { images: number };
 };
 
 export default async function AdminPlaces({ searchParams }: { searchParams: Promise<{ q?: string; ile?: string; categorie?: string; statut?: string }> }) {
@@ -29,7 +30,7 @@ export default async function AdminPlaces({ searchParams }: { searchParams: Prom
         ...(sp.categorie ? { category: { slug: sp.categorie } } : {}),
         ...(status ? { status } : {}),
       },
-      include: { island: { select: { localName: true, color: true } }, category: { select: { name: true } }, _count: { select: { images: true } } },
+      include: { island: { select: { slug: true, localName: true, color: true } }, category: { select: { name: true } }, _count: { select: { images: true } } },
       orderBy: { updatedAt: "desc" },
     }),
     prisma.place.count(),
@@ -81,13 +82,13 @@ export default async function AdminPlaces({ searchParams }: { searchParams: Prom
       </form>
 
       {places.length ? (
-        <ul className="grid gap-3">
+        <ul className="admin-stagger grid gap-3">
           {places.map((p) => (
-            <li key={p.id} className="flex flex-wrap items-center gap-4 rounded-2xl border bg-card p-3 pr-4 transition-colors hover:border-primary/50 sm:flex-nowrap">
+            <li key={p.id} className="admin-lift group flex flex-wrap items-center gap-4 rounded-2xl border bg-card p-3 pr-4 hover:border-primary/50 sm:flex-nowrap">
               <Link href={`/admin/lieux/${p.id}`} className="flex min-w-0 flex-1 items-center gap-4" aria-label={`Modifier ${p.name}`}>
                 <span className="relative block aspect-[4/3] w-24 shrink-0 overflow-hidden rounded-xl bg-muted sm:w-28">
                   {p.coverImage ? (
-                    <PlaceImage src={p.coverImage} alt="" fill sizes="112px" className="object-cover" />
+                    <PlaceImage src={p.coverImage} alt="" fill sizes="112px" className="object-cover transition-transform duration-500 group-hover:scale-110" />
                   ) : (
                     <span className="grid h-full place-items-center text-muted-foreground"><ImageOff className="size-6" aria-hidden="true" /></span>
                   )}
@@ -96,7 +97,7 @@ export default async function AdminPlaces({ searchParams }: { searchParams: Prom
                   <span className="block truncate text-base font-bold">{p.name}</span>
                   <span className="mt-1 flex flex-wrap items-center gap-x-3 gap-y-1 text-sm text-muted-foreground">
                     <span className="inline-flex items-center gap-1.5">
-                      <span aria-hidden="true" className="size-2.5 rounded-full" style={{ background: /^#[0-9a-fA-F]{3,8}$/.test(p.island.color) ? p.island.color : undefined }} />
+                      <span aria-hidden="true" className="size-2.5 rounded-full" style={{ background: islandColor(p.island) }} />
                       {p.island.localName}
                     </span>
                     <span>{p.category.name}</span>

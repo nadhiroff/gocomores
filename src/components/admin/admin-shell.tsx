@@ -24,8 +24,8 @@ export type AdminCounts = Partial<Record<(typeof NAV)[number]["href"], number>>;
 
 function Brand() {
   return (
-    <Link href="/admin" className="flex min-h-11 items-center gap-3 rounded-lg">
-      <ComorosFlag className="h-8 w-auto rounded-[3px] shadow-sm ring-1 ring-white/20" />
+    <Link href="/admin" className="admin-brand flex min-h-11 items-center gap-3 rounded-lg">
+      <ComorosFlag className="admin-wave-hover h-8 w-auto rounded-[3px] shadow-sm ring-1 ring-white/20" />
       <span className="leading-tight">
         <span className="block text-lg font-bold tracking-tight">
           Go<span className="text-flag-yellow">Comores</span>
@@ -55,10 +55,10 @@ function NavList({ counts, onNavigate }: { counts: AdminCounts; onNavigate?: () 
               )}
             >
               {active && <span aria-hidden="true" className="absolute inset-y-2 left-0 w-1 rounded-r bg-flag-yellow" />}
-              <Icon className="size-5 shrink-0" aria-hidden="true" />
+              <Icon className={cn("size-5 shrink-0 transition-transform duration-200", !active && "group-hover:scale-110")} aria-hidden="true" />
               <span className="flex-1">{label}</span>
               {!!count && (
-                <span className="rounded-full bg-flag-yellow px-2 py-0.5 text-xs font-bold text-[#1a1600]">
+                <span className="admin-pop rounded-full bg-flag-yellow px-2 py-0.5 text-xs font-bold text-[#1a1600]">
                   {count}
                   <span className="sr-only"> à traiter</span>
                 </span>
@@ -100,6 +100,7 @@ function SidebarFooter({ userName }: { userName: string }) {
 
 export function AdminShell({ userName, counts, children }: { userName: string; counts: AdminCounts; children: React.ReactNode }) {
   const [open, setOpen] = useState(false);
+  const pathname = usePathname();
   return (
     <div className="admin-theme min-h-dvh bg-background text-foreground">
       <div aria-hidden="true" className="flag-stripe fixed inset-x-0 top-0 z-50 h-1" />
@@ -147,7 +148,8 @@ export function AdminShell({ userName, counts, children }: { userName: string; c
       </div>
 
       <div className="lg:pl-72">
-        <div className="mx-auto w-full max-w-6xl px-4 pb-16 pt-6 sm:px-6 lg:px-10 lg:pt-10">{children}</div>
+        {/* La clé relance l'animation d'entrée à chaque changement de page. */}
+        <div key={pathname} className="admin-page mx-auto w-full max-w-6xl px-4 pb-16 pt-6 sm:px-6 lg:px-10 lg:pt-10">{children}</div>
       </div>
     </div>
   );

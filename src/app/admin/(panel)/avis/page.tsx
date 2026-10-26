@@ -23,14 +23,14 @@ export default async function AdminReviews({ searchParams }: { searchParams: Pro
   return (
     <>
       <PageHeader title="Avis des visiteurs" description="Les avis sont publiés immédiatement. Supprimez ceux qui sont abusifs, hors sujet ou publicitaires." />
-      <div className="mb-6 grid gap-4 sm:grid-cols-2">
+      <div className="admin-stagger mb-6 grid gap-4 sm:grid-cols-2">
         <StatCard label="Avis publiés" value={total as number} icon={Star} tone="yellow" />
         <StatCard label="Note moyenne" value={avg ? `${avg.toFixed(1).replace(".", ",")} / 5` : "—"} icon={Star} tone="green" />
       </div>
       {reviews.length ? (
-        <ul className="space-y-3">
+        <ul className="admin-stagger space-y-3">
           {reviews.map((r) => (
-            <li key={r.id} className="rounded-2xl border bg-card p-5">
+            <li key={r.id} className="admin-lift rounded-2xl border bg-card p-5">
               <div className="flex flex-wrap items-start justify-between gap-3">
                 <div className="flex items-center gap-3">
                   <span aria-hidden="true" className="grid size-10 place-items-center rounded-full bg-secondary font-bold text-secondary-foreground">{r.authorName.charAt(0).toUpperCase()}</span>
