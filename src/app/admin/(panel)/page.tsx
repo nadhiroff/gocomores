@@ -4,6 +4,7 @@ import { EmptyNote, PageHeader, Panel, Pill, StatCard } from "@/components/admin
 import { Button } from "@/components/ui/button";
 import { requireAdmin } from "@/lib/admin";
 import { prisma } from "@/lib/db";
+import { islandColor } from "@/lib/island-colors";
 import { getIslands } from "@/lib/queries";
 
 export const dynamic = "force-dynamic";
@@ -58,22 +59,22 @@ export default async function AdminDashboard() {
         }
       />
 
-      <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+      <div className="admin-stagger grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
         <StatCard label="Lieux publiés" value={places.length} icon={MapPin} tone="green" href="/admin/lieux" hint={`${verified} vérifié${verified > 1 ? "s" : ""}`} />
         <StatCard label="Photos" value={imageCount as number} icon={Images} tone="blue" href="/admin/medias" hint={`${noPhoto.length} lieu${noPhoto.length > 1 ? "x" : ""} sans photo`} />
         <StatCard label="Avis" value={agg._count} icon={Star} tone="yellow" href="/admin/avis" hint={agg._avg.rating ? `Note moyenne ${agg._avg.rating.toFixed(1).replace(".", ",")} / 5` : "Aucune note"} />
         <StatCard label="Messages" value={messageCount as number} icon={Mail} tone="red" href="/admin/messages" hint={`${newMessages as number} cette semaine`} />
       </div>
 
-      <div className="mt-6 grid gap-6 lg:grid-cols-5">
+      <div className="admin-stagger mt-6 grid gap-6 lg:grid-cols-5">
         <Panel title="À traiter" id="todo" description="Les lieux qui méritent votre attention en priorité." className="lg:col-span-3">
           {todo.length ? (
             <ul className="divide-y">
               {todo.map((t) => (
                 <li key={`${t.label}-${t.id}`}>
-                  <Link href={t.href} className="flex min-h-12 items-center gap-3 rounded-lg px-2 py-2 hover:bg-accent/60">
+                  <Link href={t.href} className="group flex min-h-12 items-center gap-3 rounded-lg px-2 py-2 transition-colors hover:bg-accent/60">
                     <t.icon className="size-5 shrink-0 text-muted-foreground" aria-hidden="true" />
-                    <span className="flex-1 font-medium">{t.name}</span>
+                    <span className="flex-1 font-medium transition-transform duration-200 group-hover:translate-x-1">{t.name}</span>
                     <Pill tone={t.tone}>{t.label}</Pill>
                   </Link>
                 </li>
@@ -89,11 +90,14 @@ export default async function AdminDashboard() {
             {perIsland.map((i) => (
               <li key={i.id}>
                 <div className="mb-1.5 flex items-baseline justify-between text-sm">
-                  <span className="font-semibold">{i.localName} <span className="font-normal text-muted-foreground">({i.name})</span></span>
+                  <span className="inline-flex items-center gap-2 font-semibold">
+                    <span aria-hidden="true" className="size-2.5 rounded-full" style={{ background: islandColor(i) }} />
+                    {i.localName} <span className="font-normal text-muted-foreground">({i.name})</span>
+                  </span>
                   <span className="tabular-nums font-semibold">{i.count}</span>
                 </div>
                 <div className="h-2.5 overflow-hidden rounded-full bg-muted">
-                  <div className="h-full rounded-full" style={{ width: `${(i.count / maxIsland) * 100}%`, background: /^#[0-9a-fA-F]{3,8}$/.test(i.color) ? i.color : "var(--primary)" }} />
+                  <div className="admin-bar h-full rounded-full" style={{ width: `${(i.count / maxIsland) * 100}%`, background: islandColor(i) }} />
                 </div>
               </li>
             ))}

@@ -354,6 +354,10 @@
   --sidebar-foreground: #e6f4ea;
   --sidebar-muted: #9cc5aa;
   --sidebar-active: #145c31;
+  /* Îles sur le drapeau : Mwali jaune, Ndzuwani rouge, Ngazidja bleu. */
+  --isle-moheli: #ffd100;
+  --isle-anjouan: #ef3340;
+  --isle-grande-comore: #003da5;
 }
 
 .dark .admin-theme {
@@ -383,6 +387,7 @@
   --sidebar-foreground: #e6f4ea;
   --sidebar-muted: #8fb39b;
   --sidebar-active: #173a25;
+  --isle-grande-comore: #3b78e7;
 }
 
 .admin-theme select {
@@ -418,4 +423,105 @@
 /* La bande blanche disparaît sur fond blanc : on la borde d'un filet. */
 .flag-stripe {
   box-shadow: inset 0 -1px 0 rgb(0 0 0 / 0.06);
+}
+
+/* ───── Animations de l'administration (neutralisées par prefers-reduced-motion, cf. @layer base) ───── */
+@keyframes admin-in {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+@keyframes admin-grow {
+  from {
+    transform: scaleX(0);
+  }
+  to {
+    transform: scaleX(1);
+  }
+}
+@keyframes admin-pop {
+  0% {
+    opacity: 0;
+    transform: scale(0.6);
+  }
+  70% {
+    transform: scale(1.08);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+@keyframes admin-wave {
+  0%,
+  100% {
+    transform: perspective(200px) rotateY(0deg) skewY(0deg);
+  }
+  50% {
+    transform: perspective(200px) rotateY(-10deg) skewY(-2deg);
+  }
+}
+@keyframes admin-glow {
+  0%,
+  100% {
+    opacity: 0.35;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.55;
+    transform: scale(1.08);
+  }
+}
+/* « backwards » : aucun transform ne subsiste après l'animation (survol .admin-lift, éléments sticky). */
+.admin-page {
+  animation: admin-in 0.45s cubic-bezier(0.2, 0.7, 0.2, 1) backwards;
+}
+.admin-stagger > * {
+  animation: admin-in 0.5s cubic-bezier(0.2, 0.7, 0.2, 1) backwards;
+}
+.admin-stagger > :nth-child(2) { animation-delay: 50ms; }
+.admin-stagger > :nth-child(3) { animation-delay: 100ms; }
+.admin-stagger > :nth-child(4) { animation-delay: 150ms; }
+.admin-stagger > :nth-child(5) { animation-delay: 200ms; }
+.admin-stagger > :nth-child(6) { animation-delay: 250ms; }
+.admin-stagger > :nth-child(7) { animation-delay: 300ms; }
+.admin-stagger > :nth-child(n + 8) { animation-delay: 350ms; }
+.admin-bar {
+  transform-origin: left center;
+  animation: admin-grow 0.9s 0.2s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+}
+.admin-pop {
+  animation: admin-pop 0.4s 0.3s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+}
+.admin-wave {
+  transform-origin: left center;
+  animation: admin-wave 4s ease-in-out infinite;
+}
+.admin-glow {
+  animation: admin-glow 8s ease-in-out infinite;
+}
+.admin-lift {
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease,
+    border-color 0.2s ease;
+}
+.admin-lift:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 24px -12px rgb(0 0 0 / 0.25);
+}
+.flag-stripe {
+  transform-origin: left center;
+  animation: admin-grow 0.8s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+}
+.admin-wave-hover {
+  transform-origin: left center;
+}
+.admin-brand:hover .admin-wave-hover {
+  animation: admin-wave 1.2s ease-in-out 2;
 }
