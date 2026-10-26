@@ -21,9 +21,9 @@ const ok = (value: string): Field => ({ value, toConfirm: false });
 const tbc = (value: string | null = null): Field => ({ value, toConfirm: true });
 
 const ISLANDS = [
-  { slug: "grande-comore", name: "Grande Comore", localName: "Ngazidja", color: "#C2410C" },
-  { slug: "anjouan", name: "Anjouan", localName: "Ndzuwani", color: "#0369A1" },
-  { slug: "moheli", name: "Mohéli", localName: "Mwali", color: "#166534" },
+  { slug: "grande-comore", name: "Grande Comore", localName: "Ngazidja", color: "#003DA5" },
+  { slug: "anjouan", name: "Anjouan", localName: "Ndzuwani", color: "#EF3340" },
+  { slug: "moheli", name: "Mohéli", localName: "Mwali", color: "#FFD100" },
 ];
 
 const CATEGORIES = [

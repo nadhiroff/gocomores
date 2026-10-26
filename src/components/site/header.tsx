@@ -17,6 +17,7 @@ export function Header() {
 
   return (
     <header className="sticky top-0 z-40 border-b bg-background/90 backdrop-blur supports-[backdrop-filter]:bg-background/75">
+      <div aria-hidden="true" className="flag-stripe h-1" />
       <div className="container-page flex h-16 items-center justify-between gap-4">
         <Logo />
         <nav aria-label="Navigation principale" className="hidden lg:block">

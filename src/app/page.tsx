@@ -74,7 +74,7 @@ export default async function HomePage() {
         <div className="container-page py-20">
           <div className="fade-up flex items-center gap-3">
             <ComorosFlag className="h-7 w-auto rounded-sm shadow-md ring-1 ring-white/30" />
-            <p className="text-sm font-semibold uppercase tracking-[0.18em] text-[#FDBA74]">Bienvenue aux Comores</p>
+            <p className="text-sm font-semibold uppercase tracking-[0.18em] text-[#FFD100]">Bienvenue aux Comores</p>
           </div>
           <h1 className="fade-up-2 mt-5 max-w-3xl text-5xl font-bold leading-[1.05] sm:text-6xl lg:text-7xl">Découvrez les Comores</h1>
           <p className="fade-up-3 mt-6 max-w-xl text-lg text-white/90 sm:text-xl">
@@ -139,7 +139,7 @@ export default async function HomePage() {
           ].map((s) => (
             <div key={s.l} className="flex flex-col-reverse gap-2">
               <dt className="text-sm font-medium uppercase tracking-wider text-white/85">{s.l}</dt>
-              <dd className="font-serif text-5xl font-bold tabular-nums text-[#FDBA74] sm:text-6xl">
+              <dd className="font-serif text-5xl font-bold tabular-nums text-[#FFD100] sm:text-6xl">
                 <CountUp value={s.v} suffix={s.s} />
               </dd>
             </div>

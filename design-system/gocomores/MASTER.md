@@ -23,8 +23,8 @@
 | On Primary | `#0F172A` | `--color-on-primary` |
 | Secondary | `#38BDF8` | `--color-secondary` |
 | On Secondary | `#0F172A` | `--color-on-secondary` |
-| Accent/CTA | `#EA580C` | `--color-accent` |
-| On Accent/CTA | `#000000` | `--color-on-accent` |
+| Accent/CTA | `#FFD100` | `--color-accent` |
+| On Accent/CTA | `#1A1600` | `--color-on-accent` |
 | Background | `#F0F9FF` | `--color-background` |
 | Foreground | `#0C4A6E` | `--color-foreground` |
 | Card | `#FFFFFF` | `--color-card` |
@@ -36,7 +36,7 @@
 | On Destructive | `#FFFFFF` | `--color-on-destructive` |
 | Ring | `#000000` | `--color-ring` |
 
-**Color Notes:** Sky blue + adventure orange [Accent adjusted from #F97316]
+**Color Notes:** Sky blue + couleurs du drapeau comorien (jaune #FFD100, rouge #EF3340, bleu #003DA5, vert #009639). Plus d'orange. Îles : Ngazidja bleu, Ndzuwani rouge, Mwali jaune.
 
 ### Typography
 
