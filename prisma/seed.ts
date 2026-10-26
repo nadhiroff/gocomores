@@ -4,7 +4,14 @@
  * Règle éditoriale : seul ce qui a été recoupé avec une source est marqué VERIFIED
  * (ici : Karthala et la vieille ville de Moroni — sources : Wikipedia, Archnet).
  * Coordonnées GPS : OpenStreetMap (Nominatim), relevées le 26/10/2026.
+ * Médinas d'Ikoni, d'Itsandra et de Ntsoudjini : coordonnées du tableau des sites UNESCO
+ * (« Les médinas des Sultanats historiques des Comores », inscrites au patrimoine mondial en 2026).
+ * Musée national et Trou du Prophète : Plus Codes publics décodés (algorithme Open Location Code).
+ * Sima : GeoNames (via geodatos.net) ; Fomboni : Wikipedia ; lac Dziani Boundouni : liste indicative UNESCO.
  * Tout le reste est TO_CONFIRM et s'affiche « Information à confirmer ».
+ *
+ * Relancer le seed ajoute les lieux manquants sans écraser ceux modifiés depuis l'admin
+ * (SEED_OVERWRITE=1 pour tout réinitialiser).
  * Le statut de Mayotte est sensible : volontairement NON inclus, en attente de décision.
  *
  * Les photos viennent de Wikimedia Commons (licences libres) : auteurs et licences
@@ -48,7 +55,9 @@ interface SeedPlace {
   lat: number;
   lng: number;
   status: "VERIFIED" | "TO_CONFIRM";
-  /** La première photo sert de couverture. */
+  /** Date de vérification si différente de VERIFIED_AT. */
+  verifiedOn?: string;
+  /** La première photo sert de couverture. Vide : un visuel aux couleurs de l'île s'affiche. */
   gallery: { file: string; alt: string }[];
 }
 
@@ -287,6 +296,171 @@ const SEED_PLACES: SeedPlace[] = [
       { file: "marche-volo-volo-3", alt: "Vendeuse de tissus et de vêtements colorés aux Comores" },
     ],
   },
+
+  /* ───── Ajouts : médinas classées et lieux historiques (recherches du 27/10/2026) ───── */
+  {
+    slug: "medina-ikoni",
+    name: "Médina d'Ikoni",
+    island: "grande-comore",
+    category: "histoire",
+    summary:
+      "Ancienne capitale du sultanat du Bambao, au pied d'une falaise volcanique au sud de Moroni : les ruines du palais des sultans se dressent à quelques mètres de la mer.",
+    history:
+      "Ikoni (ou Iconi) fut la capitale de l'île bien avant Itsandra, puis celle du sultanat du Bambao. Les ruines du palais des sultans se dressent encore à environ cinq mètres de la mer, et des murailles couronnent la falaise où les habitants se réfugiaient en cas de guerre.\n\nSa médina fait partie des six « médinas des Sultanats historiques des Comores » inscrites au patrimoine mondial de l'UNESCO en 2026, avec Moroni, Itsandra, Ntsoudjini, Mutsamudu et Domoni.",
+    practical: {
+      access: tbc("À quelques kilomètres au sud de Moroni, sur la route côtière."),
+      hours: tbc(),
+      fares: tbc(),
+      bestPeriod: tbc("Fin d'après-midi, quand la lumière rase la falaise."),
+    },
+    lat: -11.74468,
+    lng: 43.23258,
+    status: "VERIFIED",
+    verifiedOn: "2026-10-27",
+    gallery: [],
+  },
+  {
+    slug: "medina-itsandra",
+    name: "Médina d'Itsandra",
+    island: "grande-comore",
+    category: "histoire",
+    summary:
+      "Berceau de la culture d'origine swahilie aux Comores, Itsandra fut l'un des deux grands sultanats de Ngazidja et longtemps le principal port de l'île.",
+    history:
+      "Itsandra-Mdjini, dont la médina remonte au XIVe siècle, fut l'un des deux principaux sultanats de Grande Comore avant la colonisation française, fief de la dynastie des Inya Fwambaya. Longtemps principal port et capitale de l'île, elle a ensuite cédé ce rôle à Moroni.\n\nLa médina est inscrite au patrimoine mondial de l'UNESCO depuis 2026. Au pied du village, la plage d'Itsandra, à environ 2,5 km de Moroni, est l'une des plus proches de la capitale.",
+    practical: {
+      access: tbc("Environ 2,5 km au nord de Moroni par la route côtière."),
+      hours: tbc(),
+      fares: tbc(),
+      bestPeriod: tbc(),
+    },
+    lat: -11.67529,
+    lng: 43.26465,
+    status: "VERIFIED",
+    verifiedOn: "2026-10-27",
+    gallery: [],
+  },
+  {
+    slug: "medina-ntsoudjini",
+    name: "Médina de Ntsoudjini",
+    island: "grande-comore",
+    category: "histoire",
+    summary:
+      "Cité-résidence fondée par le sultan Ntibé d'Itsandra, Ntsoudjini a conservé une grande partie de son enceinte, que l'on longe à pied.",
+    history:
+      "Ntsoudjini a été bâtie comme une cité nouvelle par le sultan Ntibé d'Itsandra-Mdjini. Pour des raisons de sécurité, elle est devenue la résidence principale des sultans, des princes et des princesses, tandis qu'Itsandra restait l'ancienne capitale.\n\nL'ancienne enceinte est encore en bon état, même si les portes ont disparu. La médina est inscrite au patrimoine mondial de l'UNESCO depuis 2026.",
+    practical: {
+      access: tbc("Au nord de Moroni, à proximité d'Itsandra."),
+      hours: tbc(),
+      fares: tbc(),
+      bestPeriod: tbc(),
+    },
+    lat: -11.66369,
+    lng: 43.27002,
+    status: "VERIFIED",
+    verifiedOn: "2026-10-27",
+    gallery: [],
+  },
+  {
+    slug: "musee-national-comores",
+    name: "Musée national des Comores",
+    island: "grande-comore",
+    category: "culture",
+    summary:
+      "Ouvert en 1989 à Moroni, le musée du CNDRS présente en quatre salles l'histoire, les volcans, l'océan et les traditions de l'archipel.",
+    history:
+      "Le Musée national des Comores dépend du Centre national de documentation et de recherche scientifique (CNDRS), qui abrite aussi la Bibliothèque nationale et l'observatoire volcanologique du Karthala.\n\nSes quatre salles sont consacrées à l'histoire, l'art, l'archéologie et la religion ; à la volcanologie et aux sciences de la Terre ; à l'océanographie et aux sciences naturelles ; et à l'anthropologie sociale et culturelle.",
+    practical: {
+      access: tbc("À Moroni, le long de la RN1."),
+      hours: tbc(),
+      fares: tbc(),
+      bestPeriod: tbc("Idéal en début de séjour pour comprendre l'archipel."),
+    },
+    lat: -11.70324,
+    lng: 43.25558,
+    status: "TO_CONFIRM",
+    gallery: [],
+  },
+  {
+    slug: "trou-du-prophete",
+    name: "Trou du Prophète",
+    island: "grande-comore",
+    category: "plage",
+    summary:
+      "Petite baie abritée près de Mitsamiouli, sur la côte nord de Ngazidja, appréciée pour la baignade entre les roches volcaniques.",
+    history:
+      "Le Trou du Prophète est une crique de la côte nord de Grande Comore, à proximité de Mitsamiouli. L'origine de son nom et son histoire restent à documenter.",
+    practical: {
+      access: tbc("Près de Mitsamiouli, au nord de l'île."),
+      hours: tbc(),
+      fares: tbc(),
+      bestPeriod: tbc(),
+    },
+    lat: -11.37994,
+    lng: 43.31477,
+    status: "TO_CONFIRM",
+    gallery: [],
+  },
+  {
+    slug: "ruines-de-sima",
+    name: "Sima et sa mosquée ancienne",
+    island: "anjouan",
+    category: "histoire",
+    summary:
+      "Première capitale du sultanat shirazi d'Anjouan, Sima abrite les vestiges de la plus ancienne mosquée connue des Comores.",
+    history:
+      "La mosquée ancienne de Sima est considérée comme la plus ancienne connue de l'archipel : les études la font remonter aux XIe–XIIe siècles, avant des reconstructions au XIIIe puis vers la fin du XIVe ou le début du XVe siècle. Sima fut la première capitale du sultanat shirazi d'Anjouan.\n\nUn site d'habitat proche de la ville a livré la seule datation au radiocarbone confirmant le peuplement ancien de l'île. Les ruines sont encore visibles aujourd'hui.",
+    practical: {
+      access: tbc("Dans l'ouest d'Anjouan, par la route depuis Mutsamudu."),
+      hours: tbc(),
+      fares: tbc(),
+      bestPeriod: tbc(),
+    },
+    lat: -12.19556,
+    lng: 44.27667,
+    status: "TO_CONFIRM",
+    gallery: [],
+  },
+  {
+    slug: "lac-dziani-boundouni",
+    name: "Lac Dziani Boundouni",
+    island: "moheli",
+    category: "nature",
+    summary:
+      "Lac de cratère d'eau douce dans le sud-est de Mwali, protégé comme zone humide d'importance internationale (Ramsar) depuis 1995.",
+    history:
+      "Le Dziani Boundouni occupe un ancien cratère dans la région de Djando, au sud-est de Mohéli. C'est l'un des rares lacs d'eau douce des Comores ; le site Ramsar couvre environ 30 hectares, désignés le 9 février 1995.",
+    practical: {
+      access: tbc("Région de Djando, non loin d'Itsamia. Guide local conseillé."),
+      hours: tbc(),
+      fares: tbc(),
+      bestPeriod: tbc(),
+    },
+    lat: -12.3725,
+    lng: 43.84722,
+    status: "TO_CONFIRM",
+    gallery: [],
+  },
+  {
+    slug: "fomboni",
+    name: "Fomboni, capitale de Mwali",
+    island: "moheli",
+    category: "ville",
+    summary:
+      "Petite capitale paisible de Mohéli, avec son marché animé le matin, ses mosquées et son quai : la base idéale pour explorer l'île.",
+    history:
+      "Fomboni est la capitale et la plus grande localité de Mohéli : elle réunit plus d'un tiers de la population de l'île. Elle a donné son nom aux « accords de Fomboni » de 2001, à l'origine de la Constitution comorienne.\n\nC'est à Mohéli qu'a régné Djoumbé Fatima, sultane de 1842 à 1865 puis de 1874 à 1878, dernière grande souveraine de l'île avant le protectorat français.",
+    practical: {
+      access: tbc("Port et aérodrome de l'île. Liaisons depuis Moroni et Anjouan à confirmer."),
+      hours: tbc(),
+      fares: tbc(),
+      bestPeriod: tbc("Le matin pour le marché."),
+    },
+    lat: -12.28,
+    lng: 43.7425,
+    status: "TO_CONFIRM",
+    gallery: [],
+  },
 ];
 
 async function main() {
@@ -310,6 +484,8 @@ async function main() {
     return x.id;
   };
 
+  const overwrite = process.env.SEED_OVERWRITE === "1";
+  let skipped = 0;
   for (const p of SEED_PLACES) {
     const data = {
       name: p.name,
@@ -320,12 +496,18 @@ async function main() {
       lng: p.lng,
       googleMapsUrl: `https://www.google.com/maps/search/?api=1&query=${p.lat},${p.lng}`,
       status: p.status,
-      verifiedAt: p.status === "VERIFIED" ? VERIFIED_AT : null,
-      coverImage: `/images/places/${p.gallery[0].file}.jpg`,
-      coverAlt: p.gallery[0].alt,
+      verifiedAt: p.status === "VERIFIED" ? (p.verifiedOn ? new Date(`${p.verifiedOn}T00:00:00.000Z`) : VERIFIED_AT) : null,
+      coverImage: p.gallery.length ? `/images/places/${p.gallery[0].file}.jpg` : null,
+      coverAlt: p.gallery[0]?.alt ?? null,
       islandId: islandId(p.island),
       categoryId: categoryId(p.category),
     };
+    // Un lieu déjà présent (peut-être modifié depuis l'admin) n'est pas écrasé, sauf SEED_OVERWRITE=1.
+    const existing = await prisma.place.findUnique({ where: { slug: p.slug }, select: { id: true } });
+    if (existing && !overwrite) {
+      skipped++;
+      continue;
+    }
     const place = await prisma.place.upsert({
       where: { slug: p.slug },
       update: data,
@@ -356,7 +538,7 @@ async function main() {
   }
 
   console.log(
-    `Seed terminé : ${ISLANDS.length} îles, ${CATEGORIES.length} catégories, ${SEED_PLACES.length} lieux.`,
+    `Seed terminé : ${ISLANDS.length} îles, ${CATEGORIES.length} catégories, ${SEED_PLACES.length - skipped} lieux ajoutés ou mis à jour, ${skipped} déjà présents conservés.`,
   );
 }
 

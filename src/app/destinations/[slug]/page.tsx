@@ -8,6 +8,7 @@ import { CategoryIcon } from "@/components/site/category-icon";
 import { EmptyState } from "@/components/site/empty-state";
 import { IslandBadge } from "@/components/site/island-badge";
 import { PlaceImage } from "@/components/site/place-image";
+import { PlacePlaceholder } from "@/components/site/place-placeholder";
 import { ReviewForm } from "@/components/site/review-form";
 import { ReviewItem } from "@/components/site/review-item";
 import { StarRating } from "@/components/site/star-rating";
@@ -102,6 +103,13 @@ export default async function PlacePage({ params }: { params: Params }) {
           </div>
         </header>
 
+        {gallery.length === 0 && (
+          <div className="container-page py-8">
+            <div className="h-56 overflow-hidden rounded-xl sm:h-72">
+              <PlacePlaceholder color={place.island.color} icon={place.category.icon} large />
+            </div>
+          </div>
+        )}
         {gallery.length > 0 && (
           <section aria-label="Galerie photos" className="container-page py-8">
             <ul className="grid gap-3 sm:grid-cols-3 sm:grid-rows-2">
