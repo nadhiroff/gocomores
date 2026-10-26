@@ -8,7 +8,8 @@
 
 /*
  * Design tokens GoComores — voir design-system/gocomores/MASTER.md
- * Palette : océan profond, ciel, braise du volcan (CTA), vert de Mwali.
+ * Palette : océan profond, ciel, et les couleurs du drapeau comorien (jaune pour l'action,
+ * îles : Ngazidja bleu, Ndzuwani rouge, Mwali jaune — nuances assombries pour rester lisibles en texte).
  * Ratios WCAG calculés : texte/fond 8.9:1, texte secondaire 7.1:1, blanc sur primaire 9.5:1.
  */
 :root {
@@ -26,8 +27,8 @@
   --muted-foreground: #475569;
   --accent: #e0f2fe;
   --accent-foreground: #0c4a6e;
-  --cta: #ea580c;
-  --cta-foreground: #000000;
+  --cta: #ffd100;
+  --cta-foreground: #1a1600;
   --destructive: #dc2626;
   --destructive-foreground: #ffffff;
   --border: #bae6fd;
@@ -35,9 +36,9 @@
   --ring: #0369a1;
   --link: #0369a1;
   --ylang: #a16207;
-  --island-ngazidja: #c2410c;
-  --island-ndzuwani: #0369a1;
-  --island-mwali: #166534;
+  --island-ngazidja: #003da5;
+  --island-ndzuwani: #c8102e;
+  --island-mwali: #7a6200;
   --radius: 0.75rem;
   --shadow-sm: 0 1px 2px rgb(12 74 110 / 0.06);
   --shadow-md: 0 4px 12px rgb(12 74 110 / 0.1);
@@ -59,8 +60,8 @@
   --muted-foreground: #94a3b8;
   --accent: #123a57;
   --accent-foreground: #e0f2fe;
-  --cta: #fb923c;
-  --cta-foreground: #000000;
+  --cta: #ffd100;
+  --cta-foreground: #1a1600;
   --destructive: #f87171;
   --destructive-foreground: #0f172a;
   --border: #164b6b;
@@ -68,9 +69,9 @@
   --ring: #38bdf8;
   --link: #7dd3fc;
   --ylang: #facc15;
-  --island-ngazidja: #fb923c;
-  --island-ndzuwani: #38bdf8;
-  --island-mwali: #4ade80;
+  --island-ngazidja: #8fb3ff;
+  --island-ndzuwani: #ff7a86;
+  --island-mwali: #ffd100;
   --shadow-sm: 0 1px 2px rgb(0 0 0 / 0.4);
   --shadow-md: 0 4px 12px rgb(0 0 0 / 0.45);
   --shadow-lg: 0 12px 28px rgb(0 0 0 / 0.55);
@@ -220,7 +221,7 @@
   .hero-aurora {
     background:
       radial-gradient(60rem 28rem at 15% 10%, rgb(56 189 248 / 0.35), transparent 60%),
-      radial-gradient(48rem 26rem at 90% 30%, rgb(234 88 12 / 0.22), transparent 60%),
+      radial-gradient(48rem 26rem at 90% 30%, rgb(255 209 0 / 0.16), transparent 60%),
       linear-gradient(180deg, #082f49 0%, #0c4a6e 55%, #0b3a58 100%);
   }
   /* Fond photo du hero : fondu vers le dégradé pour garder le texte lisible. */

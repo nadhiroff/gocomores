@@ -5,7 +5,7 @@ import { BadgeCheck, CircleHelp, LocateFixed, MapPinOff, Search } from "lucide-r
 import { Button } from "@/components/ui/button";
 import { Input, NativeSelect } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { islandColorVar, islandLetter } from "@/lib/islands";
+import { islandColorVar, islandLetter, textOn } from "@/lib/islands";
 import { cn } from "@/lib/utils";
 import { MapView } from "./map-view";
 import type { MapPlace } from "./types";
@@ -107,7 +107,7 @@ export function MapExplorer({ places, islands, categories }: { places: MapPlace[
           <ul className="flex flex-wrap gap-x-3 gap-y-1 text-xs" aria-label="Légende">
             {islands.map((i) => (
               <li key={i.slug} className="inline-flex items-center gap-1.5">
-                <span className="grid size-5 place-items-center rounded-full text-[10px] font-bold text-white" style={{ background: i.color }} aria-hidden="true">
+                <span className="grid size-5 place-items-center rounded-full text-[10px] font-bold" style={{ background: i.color, color: textOn(i.color) }} aria-hidden="true">
                   {islandLetter(i.slug)}
                 </span>
                 {i.label}
@@ -126,7 +126,7 @@ export function MapExplorer({ places, islands, categories }: { places: MapPlace[
                   aria-pressed={selected === p.id}
                   className={cn("flex min-h-16 w-full items-start gap-3 px-4 py-3 text-left transition-colors hover:bg-accent", selected === p.id && "bg-secondary")}
                 >
-                  <span className="mt-0.5 grid size-7 shrink-0 place-items-center rounded-full text-xs font-bold text-white" style={{ background: p.island.color }} aria-hidden="true">
+                  <span className="mt-0.5 grid size-7 shrink-0 place-items-center rounded-full text-xs font-bold" style={{ background: p.island.color, color: textOn(p.island.color) }} aria-hidden="true">
                     {islandLetter(p.island.slug)}
                   </span>
                   <span className="min-w-0">

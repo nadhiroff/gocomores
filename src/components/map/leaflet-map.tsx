@@ -3,7 +3,7 @@ import L from "leaflet";
 import { useEffect, useMemo, useRef } from "react";
 import { CircleMarker, MapContainer, Marker, Popup, TileLayer, useMap } from "react-leaflet";
 import Link from "next/link";
-import { islandLetter } from "@/lib/islands";
+import { islandLetter, textOn } from "@/lib/islands";
 import type { MapPlace } from "./types";
 
 const HEX = /^#[0-9a-fA-F]{3,8}$/;
@@ -13,7 +13,7 @@ function makeIcon(color: string, letter: string) {
   const safe = HEX.test(color) ? color : "#0C4A6E";
   return L.divIcon({
     className: "",
-    html: `<div class="gc-marker" style="background:${safe}"><span aria-hidden="true">${letter}</span></div>`,
+    html: `<div class="gc-marker" style="background:${safe};color:${textOn(safe)}"><span aria-hidden="true">${letter}</span></div>`,
     iconSize: [36, 36],
     iconAnchor: [18, 36],
     popupAnchor: [0, -34],
