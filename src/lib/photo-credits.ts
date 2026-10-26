@@ -1,0 +1,42 @@
+/**
+ * Photos issues de Wikimedia Commons, réutilisées selon leur licence.
+ * Toute photo ajoutée dans public/images doit être déclarée ici (affichée sur /credits-photos).
+ */
+export interface PhotoCredit {
+  src: string;
+  title: string;
+  author: string;
+  license: string;
+  licenseUrl: string;
+  source: string;
+}
+
+export const PHOTO_CREDITS: PhotoCredit[] = [
+  { src: "/images/hero-coelacanthe.jpg", title: "Cœlacanthe de la Comore (Latimeria chalumnae), pavillon des Comores, Expo 2020 Dubaï", author: "JaffaFalcon", license: "CC BY-SA 4.0", licenseUrl: "https://creativecommons.org/licenses/by-sa/4.0", source: "https://commons.wikimedia.org/wiki/File:Comoran_Coelacanth_Latimeria_chalumnae_Comoros_Pavilion_Expo_2020_Dubai_Photo_by_Prof_Dr_Norman_Ali_Khalaf.jpg" },
+  { src: "/images/places/mont-karthala-1.jpg", title: "Vue panoramique de la caldeira du Karthala depuis le bord du cratère", author: "Rokaso", license: "CC BY-SA 4.0", licenseUrl: "https://creativecommons.org/licenses/by-sa/4.0", source: "https://commons.wikimedia.org/wiki/File:Overviewing_to_Karthala_crater.jpg" },
+  { src: "/images/places/mont-karthala-2.jpg", title: "La caldeira du Karthala et ses coulées de lave sous un ciel bleu", author: "Lolodevenelles", license: "CC BY-SA 4.0", licenseUrl: "https://creativecommons.org/licenses/by-sa/4.0", source: "https://commons.wikimedia.org/wiki/File:Volcan_Karthala_vue_de_la_caldeira_13_08_2019.jpg" },
+  { src: "/images/places/mont-karthala-3.jpg", title: "Randonneur sur le sentier de montée vers le cratère du Karthala", author: "Rokaso", license: "CC BY-SA 4.0", licenseUrl: "https://creativecommons.org/licenses/by-sa/4.0", source: "https://commons.wikimedia.org/wiki/File:Hiking_to_Karthala_crater.jpg" },
+  { src: "/images/places/vieille-ville-moroni-mosquee-vendredi-1.jpg", title: "La mosquée du Vendredi de Moroni dominant le vieux port et ses barques colorées", author: "Radosław Botev", license: "CC BY 3.0 pl", licenseUrl: "https://creativecommons.org/licenses/by/3.0/pl/deed.en", source: "https://commons.wikimedia.org/wiki/File:Moroni_Friday_Mosque_Comoros.jpg" },
+  { src: "/images/places/vieille-ville-moroni-mosquee-vendredi-2.jpg", title: "L'ancienne mosquée du Vendredi et le port de Moroni se reflétant dans l'eau", author: "Woodlouse from Brighton, UK", license: "CC BY-SA 2.0", licenseUrl: "https://creativecommons.org/licenses/by-sa/2.0", source: "https://commons.wikimedia.org/wiki/File:Flickr_-_Woodlouse_-_Old_Friday_Mosque_and_harbour,_Moroni.jpg" },
+  { src: "/images/places/vieille-ville-moroni-mosquee-vendredi-3.jpg", title: "Ruelle étroite de la médina de Moroni", author: "Radosław Botev", license: "CC BY 3.0 pl", licenseUrl: "https://creativecommons.org/licenses/by/3.0/pl/deed.en", source: "https://commons.wikimedia.org/wiki/File:Moroni_Medina_Comoros_1.jpg" },
+  { src: "/images/places/lac-sale-1.jpg", title: "Le lac Salé, lac de cratère aux eaux vertes, en bord d'océan", author: "David Stanley from Nanaimo, Canada", license: "CC BY 2.0", licenseUrl: "https://creativecommons.org/licenses/by/2.0", source: "https://commons.wikimedia.org/wiki/File:Lac_Sale_(10934891926).jpg" },
+  { src: "/images/places/lac-sale-2.jpg", title: "Ancien cratère volcanique rempli d'eau sur la côte de Grande Comore", author: "Woodlouse", license: "CC BY-SA 2.0", licenseUrl: "https://creativecommons.org/licenses/by-sa/2.0", source: "https://commons.wikimedia.org/wiki/File:Old_volcanic_crater-Grande_Comore.jpg" },
+  { src: "/images/places/plages-mitsamiouli-1.jpg", title: "Chemin de sable sous les cocotiers menant à la plage de Mitsamiouli", author: "Radosław Botev", license: "CC BY-SA 4.0", licenseUrl: "https://creativecommons.org/licenses/by-sa/4.0", source: "https://commons.wikimedia.org/wiki/File:Palm_trees_at_Mitsamiouli_beach.jpg" },
+  { src: "/images/places/plages-mitsamiouli-2.jpg", title: "Plage de sable blanc de Mitsamiouli bordée de cocotiers", author: "Radosław Botev", license: "CC BY-SA 4.0", licenseUrl: "https://creativecommons.org/licenses/by-sa/4.0", source: "https://commons.wikimedia.org/wiki/File:Mitsamiouli_beach_1.jpg" },
+  { src: "/images/places/plages-mitsamiouli-3.jpg", title: "Large plage de sable clair et cocoteraie à Mitsamiouli", author: "Radosław Botev", license: "CC BY-SA 4.0", licenseUrl: "https://creativecommons.org/licenses/by-sa/4.0", source: "https://commons.wikimedia.org/wiki/File:Mitsamiouli_beach_2.jpg" },
+  { src: "/images/places/medina-mutsamudu-1.jpg", title: "Les remparts de la citadelle de Mutsamudu face à l'océan", author: "David Stanley from Nanaimo, Canada", license: "CC BY 2.0", licenseUrl: "https://creativecommons.org/licenses/by/2.0", source: "https://commons.wikimedia.org/wiki/File:Citadel_of_Mutsamudu_(9983241846).jpg" },
+  { src: "/images/places/medina-mutsamudu-2.jpg", title: "La ville et le port de Mutsamudu vus des hauteurs", author: "Peioma", license: "CC BY-SA 3.0", licenseUrl: "https://creativecommons.org/licenses/by-sa/3.0", source: "https://commons.wikimedia.org/wiki/File:Mutsamudu_port1.jpg" },
+  { src: "/images/places/medina-mutsamudu-3.jpg", title: "Vue sur Mutsamudu et les montagnes d'Anjouan", author: "GeGki", license: "CC BY-SA 4.0", licenseUrl: "https://creativecommons.org/licenses/by-sa/4.0", source: "https://commons.wikimedia.org/wiki/File:Mutsamudu.jpg" },
+  { src: "/images/places/domoni-1.jpg", title: "Photographie ancienne de Domoni, vers 1930", author: "Vienne, Emile", license: "Public domain", licenseUrl: "", source: "https://commons.wikimedia.org/wiki/File:Domani-Anjouan_1930.jpg" },
+  { src: "/images/places/domoni-2.jpg", title: "Ville côtière d'Anjouan et ses minarets au bord de l'océan", author: "Haryamouji", license: "CC BY-SA 3.0", licenseUrl: "https://creativecommons.org/licenses/by-sa/3.0", source: "https://commons.wikimedia.org/wiki/File:Anjouan_-_Islands_of_Comoros.jpg" },
+  { src: "/images/places/parc-marin-moheli-1.jpg", title: "Récif corallien préservé au large de Mohéli", author: "alKomor.com", license: "CC BY-SA 2.0", licenseUrl: "https://creativecommons.org/licenses/by-sa/2.0", source: "https://commons.wikimedia.org/wiki/File:Ouallah-Moh%C3%A9li-Corail.jpg" },
+  { src: "/images/places/parc-marin-moheli-2.jpg", title: "Les îlots de Nioumachoua vus depuis la plage", author: "Fatima771", license: "CC BY 3.0", licenseUrl: "https://creativecommons.org/licenses/by/3.0", source: "https://commons.wikimedia.org/wiki/File:%C3%8Elot_de_Nioumachoua.jpg" },
+  { src: "/images/places/parc-marin-moheli-3.jpg", title: "Panorama sur la mangrove et la baie de Nioumachoua", author: "Daryl Wallace", license: "CC BY-SA 2.0", licenseUrl: "https://creativecommons.org/licenses/by-sa/2.0", source: "https://commons.wikimedia.org/wiki/File:Panorama_mangrove_de_nioumachoua.jpg" },
+  { src: "/images/places/plage-itsamia-1.jpg", title: "Deux tortues marines nageant dans les eaux de Mohéli", author: "alKomor.com", license: "CC BY-SA 2.0", licenseUrl: "https://creativecommons.org/licenses/by-sa/2.0", source: "https://commons.wikimedia.org/wiki/File:Mating_turtles-Moheli.jpg" },
+  { src: "/images/places/plage-itsamia-2.jpg", title: "Plage de Mohéli encadrée de pandanus, face aux collines boisées", author: "alKomor.com", license: "CC BY-SA 2.0", licenseUrl: "https://creativecommons.org/licenses/by-sa/2.0", source: "https://commons.wikimedia.org/wiki/File:Moh%C3%A9li-Beach.jpg" },
+  { src: "/images/places/pic-ntringui-1.jpg", title: "Le lac Dzialandzé entouré des forêts des hauts d'Anjouan", author: "Peioma", license: "Public domain", licenseUrl: "", source: "https://commons.wikimedia.org/wiki/File:Lac_dzialandze.JPG" },
+  { src: "/images/places/marche-volo-volo-2.jpg", title: "Marchands sous des parasols colorés dans un marché de Moroni", author: "Radosław Botev", license: "CC BY 3.0 pl", licenseUrl: "https://creativecommons.org/licenses/by/3.0/pl/deed.en", source: "https://commons.wikimedia.org/wiki/File:Moroni_market_scene_2.jpg" },
+  { src: "/images/places/marche-volo-volo-3.jpg", title: "Vendeuse de tissus et de vêtements colorés aux Comores", author: "Rokaso", license: "CC BY-SA 4.0", licenseUrl: "https://creativecommons.org/licenses/by-sa/4.0", source: "https://commons.wikimedia.org/wiki/File:Women_selling_colourful_dress_in_Comoros.jpg" },
+];
+
+export const HERO_PHOTO = PHOTO_CREDITS[0];
