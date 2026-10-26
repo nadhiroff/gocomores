@@ -1,0 +1,311 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+@import "@fontsource-variable/inter";
+@import "@fontsource-variable/playfair-display";
+@import "leaflet/dist/leaflet.css";
+
+@custom-variant dark (&:is(.dark *));
+
+/*
+ * Design tokens GoComores — voir design-system/gocomores/MASTER.md
+ * Palette : océan profond, ciel, braise du volcan (CTA), vert de Mwali.
+ * Ratios WCAG calculés : texte/fond 8.9:1, texte secondaire 7.1:1, blanc sur primaire 9.5:1.
+ */
+:root {
+  --background: #f0f9ff;
+  --foreground: #0c4a6e;
+  --card: #ffffff;
+  --card-foreground: #0c4a6e;
+  --popover: #ffffff;
+  --popover-foreground: #0c4a6e;
+  --primary: #0c4a6e;
+  --primary-foreground: #ffffff;
+  --secondary: #e0f2fe;
+  --secondary-foreground: #0c4a6e;
+  --muted: #e8f2f8;
+  --muted-foreground: #475569;
+  --accent: #e0f2fe;
+  --accent-foreground: #0c4a6e;
+  --cta: #ea580c;
+  --cta-foreground: #000000;
+  --destructive: #dc2626;
+  --destructive-foreground: #ffffff;
+  --border: #bae6fd;
+  --input: #4b86a6;
+  --ring: #0369a1;
+  --link: #0369a1;
+  --ylang: #a16207;
+  --island-ngazidja: #c2410c;
+  --island-ndzuwani: #0369a1;
+  --island-mwali: #166534;
+  --radius: 0.75rem;
+  --shadow-sm: 0 1px 2px rgb(12 74 110 / 0.06);
+  --shadow-md: 0 4px 12px rgb(12 74 110 / 0.1);
+  --shadow-lg: 0 12px 28px rgb(12 74 110 / 0.14);
+}
+
+.dark {
+  --background: #071a2b;
+  --foreground: #e0f2fe;
+  --card: #0b2a40;
+  --card-foreground: #e0f2fe;
+  --popover: #0b2a40;
+  --popover-foreground: #e0f2fe;
+  --primary: #38bdf8;
+  --primary-foreground: #0f172a;
+  --secondary: #0f2f47;
+  --secondary-foreground: #e0f2fe;
+  --muted: #0f2f47;
+  --muted-foreground: #94a3b8;
+  --accent: #123a57;
+  --accent-foreground: #e0f2fe;
+  --cta: #fb923c;
+  --cta-foreground: #000000;
+  --destructive: #f87171;
+  --destructive-foreground: #0f172a;
+  --border: #164b6b;
+  --input: #5c8fb0;
+  --ring: #38bdf8;
+  --link: #7dd3fc;
+  --ylang: #facc15;
+  --island-ngazidja: #fb923c;
+  --island-ndzuwani: #38bdf8;
+  --island-mwali: #4ade80;
+  --shadow-sm: 0 1px 2px rgb(0 0 0 / 0.4);
+  --shadow-md: 0 4px 12px rgb(0 0 0 / 0.45);
+  --shadow-lg: 0 12px 28px rgb(0 0 0 / 0.55);
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-cta: var(--cta);
+  --color-cta-foreground: var(--cta-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-link: var(--link);
+  --color-ylang: var(--ylang);
+  --color-ngazidja: var(--island-ngazidja);
+  --color-ndzuwani: var(--island-ndzuwani);
+  --color-mwali: var(--island-mwali);
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --font-sans: "Inter Variable", ui-sans-serif, system-ui, sans-serif;
+  --font-serif: "Playfair Display Variable", ui-serif, Georgia, serif;
+  --shadow-card: var(--shadow-md);
+  --shadow-raised: var(--shadow-lg);
+}
+
+@layer base {
+  * {
+    border-color: var(--border);
+  }
+  html {
+    scroll-behavior: smooth;
+    /* Le bandeau de sécurité fixe ne doit jamais masquer un élément focalisé. */
+    scroll-padding-top: 5rem;
+    scroll-padding-bottom: 7rem;
+    -webkit-text-size-adjust: 100%;
+  }
+  body {
+    background: var(--background);
+    color: var(--foreground);
+    font-family: var(--font-sans);
+    font-size: 1rem;
+    line-height: 1.6;
+    overflow-x: hidden;
+  }
+  h1,
+  h2,
+  h3 {
+    font-family: var(--font-serif);
+    letter-spacing: -0.01em;
+    text-wrap: balance;
+  }
+  p {
+    text-wrap: pretty;
+  }
+  a,
+  button,
+  [role="button"],
+  summary,
+  select,
+  label[for],
+  input[type="checkbox"],
+  input[type="radio"] {
+    cursor: pointer;
+  }
+  select {
+    color-scheme: dark;
+  }
+  select option {
+    color: #0c4a6e;
+    background-color: #ffffff;
+  }
+  :focus-visible {
+    outline: 3px solid var(--ring);
+    outline-offset: 2px;
+    border-radius: 4px;
+  }
+  ::selection {
+    background: var(--cta);
+    color: var(--cta-foreground);
+  }
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+}
+
+@layer components {
+  .container-page {
+    margin-inline: auto;
+    width: 100%;
+    max-width: 72rem;
+    padding-inline: 1rem;
+  }
+  @media (min-width: 640px) {
+    .container-page {
+      padding-inline: 1.5rem;
+    }
+  }
+  .section {
+    padding-block: 4rem;
+  }
+  @media (min-width: 1024px) {
+    .section {
+      padding-block: 6rem;
+    }
+  }
+  .eyebrow {
+    font-size: 0.8125rem;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--ngazidja-text, var(--island-ngazidja));
+  }
+  .hero-aurora {
+    background:
+      radial-gradient(60rem 28rem at 15% 10%, rgb(56 189 248 / 0.35), transparent 60%),
+      radial-gradient(48rem 26rem at 90% 30%, rgb(234 88 12 / 0.22), transparent 60%),
+      linear-gradient(180deg, #082f49 0%, #0c4a6e 55%, #0b3a58 100%);
+  }
+  /* Fond photo du hero : fondu vers le dégradé pour garder le texte lisible. */
+  .hero-photo {
+    mask-image: linear-gradient(180deg, #000 45%, transparent 95%);
+  }
+  @media (min-width: 64rem) {
+    .hero-photo {
+      mask-image: radial-gradient(ellipse 55% 60% at 55% 50%, #000 45%, transparent 100%);
+    }
+  }
+  .fade-up {
+    animation: fade-up 0.6s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+  }
+  .fade-up-2 {
+    animation: fade-up 0.6s 0.1s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+  }
+  .fade-up-3 {
+    animation: fade-up 0.6s 0.2s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+  }
+  .scroll-cue {
+    animation: bob 2.2s ease-in-out infinite;
+  }
+}
+
+@keyframes fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+@keyframes bob {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(6px);
+  }
+}
+
+/* Leaflet : adapter les contrôles aux tokens, cibles tactiles ≥ 44px */
+.leaflet-container {
+  font-family: var(--font-sans);
+  background: var(--muted);
+  z-index: 0;
+}
+.leaflet-bar a,
+.leaflet-bar a:hover,
+.leaflet-touch .leaflet-bar a {
+  width: 44px;
+  height: 44px;
+  line-height: 44px;
+  font-size: 20px;
+}
+.leaflet-popup-content-wrapper,
+.leaflet-popup-tip {
+  background: var(--popover);
+  color: var(--popover-foreground);
+}
+.leaflet-popup-content {
+  margin: 0.75rem 1rem;
+  font-size: 0.9375rem;
+  line-height: 1.5;
+}
+.leaflet-popup-close-button {
+  width: 44px !important;
+  height: 44px !important;
+  font-size: 22px !important;
+  line-height: 44px !important;
+  color: var(--foreground) !important;
+}
+.gc-marker {
+  display: grid;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 9999px 9999px 9999px 2px;
+  transform: rotate(-45deg);
+  border: 3px solid #ffffff;
+  box-shadow: 0 2px 8px rgb(0 0 0 / 0.35);
+  color: #ffffff;
+  font-weight: 700;
+  font-size: 14px;
+}
+.gc-marker > span {
+  transform: rotate(45deg);
+}
+.leaflet-marker-icon:focus-visible .gc-marker {
+  outline: 3px solid var(--ring);
+  outline-offset: 3px;
+}

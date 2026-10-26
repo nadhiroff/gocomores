@@ -1,0 +1,141 @@
+generator client {
+  provider   = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+enum PlaceStatus {
+  VERIFIED
+  TO_CONFIRM
+}
+
+model Island {
+  id        Int     @id @default(autoincrement())
+  slug      String  @unique @db.VarChar(80)
+  name      String  @db.VarChar(120)
+  localName String  @map("local_name") @db.VarChar(120)
+  color     String  @db.VarChar(9)
+  places    Place[]
+  guides    Guide[]
+
+  @@map("islands")
+}
+
+model Category {
+  id     Int     @id @default(autoincrement())
+  slug   String  @unique @db.VarChar(80)
+  name   String  @db.VarChar(120)
+  icon   String  @db.VarChar(60)
+  places Place[]
+
+  @@map("categories")
+}
+
+model Place {
+  id             Int          @id @default(autoincrement())
+  slug           String       @unique @db.VarChar(160)
+  name           String       @db.VarChar(200)
+  summary        String       @db.VarChar(400)
+  history        String       @db.Text
+  practicalInfo  Json         @map("practical_info")
+  lat            Float
+  lng            Float
+  googleMapsUrl  String?      @map("google_maps_url") @db.VarChar(500)
+  status         PlaceStatus  @default(TO_CONFIRM)
+  verifiedAt     DateTime?    @map("verified_at")
+  coverImage     String?      @map("cover_image") @db.VarChar(500)
+  coverAlt       String?      @map("cover_alt") @db.VarChar(300)
+  createdAt      DateTime     @default(now()) @map("created_at")
+  updatedAt      DateTime     @updatedAt @map("updated_at")
+  islandId       Int          @map("island_id")
+  categoryId     Int          @map("category_id")
+  island         Island       @relation(fields: [islandId], references: [id])
+  category       Category     @relation(fields: [categoryId], references: [id])
+  images         PlaceImage[]
+  reviews        Review[]
+
+  @@index([islandId])
+  @@index([categoryId])
+  @@index([status])
+  @@map("places")
+}
+
+model PlaceImage {
+  id      Int    @id @default(autoincrement())
+  placeId Int    @map("place_id")
+  url     String @db.VarChar(500)
+  alt     String @db.VarChar(300)
+  order   Int    @default(0)
+  place   Place  @relation(fields: [placeId], references: [id], onDelete: Cascade)
+
+  @@index([placeId])
+  @@map("place_images")
+}
+
+model Review {
+  id         Int      @id @default(autoincrement())
+  authorName String   @map("author_name") @db.VarChar(60)
+  rating     Int      @db.TinyInt
+  comment    String   @db.VarChar(1000)
+  ipHash     String   @map("ip_hash") @db.VarChar(64)
+  placeId    Int?     @map("place_id")
+  createdAt  DateTime @default(now()) @map("created_at")
+  place      Place?   @relation(fields: [placeId], references: [id], onDelete: SetNull)
+
+  @@index([placeId])
+  @@index([createdAt])
+  @@index([ipHash, createdAt])
+  @@map("reviews")
+}
+
+model ContactMessage {
+  id        Int      @id @default(autoincrement())
+  name      String   @db.VarChar(100)
+  email     String   @db.VarChar(200)
+  subject   String   @db.VarChar(200)
+  message   String   @db.Text
+  ipHash    String   @map("ip_hash") @db.VarChar(64)
+  createdAt DateTime @default(now()) @map("created_at")
+
+  @@index([ipHash, createdAt])
+  @@map("contact_messages")
+}
+
+model SiteAlert {
+  id        Int      @id @default(autoincrement())
+  message   String   @db.VarChar(400)
+  link      String?  @db.VarChar(300)
+  active    Boolean  @default(true)
+  createdAt DateTime @default(now()) @map("created_at")
+
+  @@map("site_alerts")
+}
+
+// Optionnel : annuaire de guides (non exposé dans l'interface publique pour l'instant).
+model Guide {
+  id        Int    @id @default(autoincrement())
+  name      String @db.VarChar(120)
+  islandId  Int    @map("island_id")
+  phone     String @db.VarChar(40)
+  languages String @db.VarChar(200)
+  island    Island @relation(fields: [islandId], references: [id])
+
+  @@index([islandId])
+  @@map("guides")
+}
+
+// Comptes administrateurs (remplace ADMIN_EMAIL / ADMIN_PASSWORD_HASH du .env).
+model AdminUser {
+  id           Int       @id @default(autoincrement())
+  email        String    @unique @db.VarChar(200)
+  name         String    @db.VarChar(100)
+  passwordHash String    @map("password_hash") @db.VarChar(100)
+  active       Boolean   @default(true)
+  createdAt    DateTime  @default(now()) @map("created_at")
+  lastLoginAt  DateTime? @map("last_login_at")
+
+  @@map("admin_users")
+}
