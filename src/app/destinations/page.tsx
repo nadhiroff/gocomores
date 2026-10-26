@@ -118,7 +118,7 @@ export default async function DestinationsPage({ searchParams }: { searchParams:
         </p>
 
         {places.length ? (
-          <ul className="mt-5 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+          <ul className="mt-5 grid gap-6 sm:grid-cols-2 lg:grid-cols-3 lg:gap-8 2xl:grid-cols-4">
             {places.map((p, i) => (
               <li key={p.id}>
                 <PlaceCard place={p} priority={i < 3} />

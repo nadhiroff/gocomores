@@ -109,7 +109,7 @@ export default async function HomePage() {
         <h2 className="mt-2 text-3xl font-bold sm:text-4xl">Des lieux pour chaque voyage</h2>
         <p className="mt-3 max-w-2xl text-lg text-muted-foreground">Volcans, médinas, plages et réserves marines : une sélection de lieux, chacun avec son niveau de vérification.</p>
         {places.length ? (
-          <ul className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+          <ul className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-3 lg:gap-8">
             {places.map((p, i) => (
               <li key={p.id}>
                 <PlaceCard place={p} priority={i < 3} />
@@ -151,7 +151,7 @@ export default async function HomePage() {
       <section className="section container-page">
         <p className="eyebrow">Nos engagements</p>
         <h2 className="mt-2 text-3xl font-bold sm:text-4xl">Pourquoi GoComores ?</h2>
-        <ol className="mt-10 grid gap-6 md:grid-cols-3">
+        <ol className="mt-10 grid gap-6 md:grid-cols-3 lg:gap-8">
           {COMMITMENTS.map((c) => (
             <li key={c.n} className="rounded-xl border bg-card p-7 shadow-[var(--shadow-sm)]">
               <div className="flex items-center justify-between">
@@ -186,7 +186,7 @@ export default async function HomePage() {
           </div>
           <div className="mt-8">
             {latest.reviews.length ? (
-              <ul className="grid gap-5 md:grid-cols-3">
+              <ul className="grid gap-5 md:grid-cols-3 lg:gap-8">
                 {latest.reviews.map((r) => (
                   <li key={r.id}>
                     <ReviewItem review={r} />
