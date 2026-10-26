@@ -1,6 +1,6 @@
 /**
  * Photos issues de Wikimedia Commons, réutilisées selon leur licence.
- * Toute photo ajoutée dans public/images doit être déclarée ici (affichée sur /credits-photos).
+ * Toute photo ajoutée dans public/images ou référencée depuis Wikimedia doit être déclarée ici (affichée sur /credits-photos).
  */
 export interface PhotoCredit {
   src: string;
@@ -37,6 +37,13 @@ export const PHOTO_CREDITS: PhotoCredit[] = [
   { src: "/images/places/pic-ntringui-1.jpg", title: "Le lac Dzialandzé entouré des forêts des hauts d'Anjouan", author: "Peioma", license: "Public domain", licenseUrl: "", source: "https://commons.wikimedia.org/wiki/File:Lac_dzialandze.JPG" },
   { src: "/images/places/marche-volo-volo-2.jpg", title: "Marchands sous des parasols colorés dans un marché de Moroni", author: "Radosław Botev", license: "CC BY 3.0 pl", licenseUrl: "https://creativecommons.org/licenses/by/3.0/pl/deed.en", source: "https://commons.wikimedia.org/wiki/File:Moroni_market_scene_2.jpg" },
   { src: "/images/places/marche-volo-volo-3.jpg", title: "Vendeuse de tissus et de vêtements colorés aux Comores", author: "Rokaso", license: "CC BY-SA 4.0", licenseUrl: "https://creativecommons.org/licenses/by-sa/4.0", source: "https://commons.wikimedia.org/wiki/File:Women_selling_colourful_dress_in_Comoros.jpg" },
+  // Photos référencées directement depuis Wikimedia Commons (lieux ajoutés le 27/10/2026).
+  { src: "https://upload.wikimedia.org/wikipedia/commons/8/8a/Palais_de_Kaviridjeo_%2810996096686%29.jpg", title: "Ruines du palais de Kaviridjeo à Ikoni", author: "David Stanley from Nanaimo, Canada", license: "CC BY 2.0", licenseUrl: "https://creativecommons.org/licenses/by/2.0", source: "https://commons.wikimedia.org/wiki/File:Palais_de_Kaviridjeo_(10996096686).jpg" },
+  { src: "https://upload.wikimedia.org/wikipedia/commons/d/d2/Grande_Comore-Iconi-Ancienne_capitale.jpg", title: "Carte postale ancienne d'Ikoni, ancienne capitale (vers 1928)", author: "Auteur inconnu (source : Gallica)", license: "Public domain", licenseUrl: "", source: "https://commons.wikimedia.org/wiki/File:Grande_Comore-Iconi-Ancienne_capitale.jpg" },
+  { src: "https://upload.wikimedia.org/wikipedia/commons/thumb/7/71/Moroni_beach.jpg/1280px-Moroni_beach.jpg", title: "La plage d'Itsandra, près de Moroni", author: "Radosław Botev", license: "CC BY-SA 4.0", licenseUrl: "https://creativecommons.org/licenses/by-sa/4.0", source: "https://commons.wikimedia.org/wiki/File:Moroni_beach.jpg" },
+  { src: "https://upload.wikimedia.org/wikipedia/commons/0/00/Musee_des_Comores_%2810842842534%29.jpg", title: "Le Musée national des Comores à Moroni", author: "David Stanley from Nanaimo, Canada", license: "CC BY 2.0", licenseUrl: "https://creativecommons.org/licenses/by/2.0", source: "https://commons.wikimedia.org/wiki/File:Musee_des_Comores_(10842842534).jpg" },
+  { src: "https://upload.wikimedia.org/wikipedia/commons/thumb/6/6b/Fomboni-Ship.jpg/1280px-Fomboni-Ship.jpg", title: "Le navire « Île de Mohéli » dans le port de Fomboni", author: "alKomor.com", license: "CC BY-SA 2.0", licenseUrl: "https://creativecommons.org/licenses/by-sa/2.0", source: "https://commons.wikimedia.org/wiki/File:Fomboni-Ship.jpg" },
+  { src: "https://upload.wikimedia.org/wikipedia/commons/5/5e/Queen_of_Moh%C3%A9li.jpg", title: "La reine de Mohéli recevant une délégation française (gravure, 1863)", author: "Auteur inconnu", license: "Public domain", licenseUrl: "", source: "https://commons.wikimedia.org/wiki/File:Queen_of_Moh%C3%A9li.jpg" },
 ];
 
 export const HERO_PHOTO = PHOTO_CREDITS[0];
