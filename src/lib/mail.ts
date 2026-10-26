@@ -13,6 +13,10 @@ export async function sendContactMail(m: { name: string; email: string; subject:
       port: Number(SMTP_PORT ?? 587),
       secure: SMTP_SECURE === "true",
       auth: SMTP_USER ? { user: SMTP_USER, pass: SMTP_PASS } : undefined,
+      // Sans ces délais, un serveur SMTP injoignable bloquerait la requête jusqu'à 10 minutes.
+      connectionTimeout: 10_000,
+      greetingTimeout: 10_000,
+      socketTimeout: 20_000,
     });
     await transport.sendMail({
       from: SMTP_FROM ?? CONTACT_TO,
