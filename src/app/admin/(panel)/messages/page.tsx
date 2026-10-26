@@ -16,9 +16,9 @@ export default async function AdminMessages() {
     <>
       <PageHeader title="Messages" description={`${rows.length} message${rows.length > 1 ? "s" : ""} reçu${rows.length > 1 ? "s" : ""} via le formulaire de contact.`} />
       {rows.length ? (
-        <ul className="space-y-3">
+        <ul className="admin-stagger space-y-3">
           {rows.map((m) => (
-            <li key={m.id} className="rounded-2xl border bg-card p-5">
+            <li key={m.id} className="admin-lift rounded-2xl border bg-card p-5">
               <div className="flex flex-wrap items-start justify-between gap-2">
                 <div className="min-w-0">
                   <p className="text-lg font-bold">{m.subject}</p>

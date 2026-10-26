@@ -63,15 +63,15 @@ export default async function AdminMedia({ searchParams }: { searchParams: Promi
             <Button asChild size="sm" variant={onlyEmpty ? "secondary" : "ghost"}><Link href="/admin/medias?filtre=sans-photo" aria-current={onlyEmpty ? "true" : undefined}>Sans photo ({withoutPhoto})</Link></Button>
           </div>
           {list.length ? (
-            <ul className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
+            <ul className="admin-stagger grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
               {list.map((r) => (
                 <li key={r.id}>
-                  <Link href={`/admin/medias?lieu=${r.id}`} className="group block overflow-hidden rounded-2xl border bg-card transition-colors hover:border-primary/60">
+                  <Link href={`/admin/medias?lieu=${r.id}`} className="admin-lift group block overflow-hidden rounded-2xl border bg-card hover:border-primary/60">
                     <span className="grid aspect-[16/9] grid-cols-3 grid-rows-2 gap-0.5 bg-muted">
                       {r.images.length ? (
                         r.images.slice(0, 3).map((img, i, shown) => (
-                          <span key={img.id} className={cn("relative", i === 0 ? (shown.length === 1 ? "col-span-3 row-span-2" : "col-span-2 row-span-2") : shown.length === 2 && "row-span-2")}>
-                            <PlaceImage src={img.url} alt="" fill sizes={i === 0 ? "260px" : "130px"} className="object-cover" />
+                          <span key={img.id} className={cn("relative overflow-hidden", i === 0 ? (shown.length === 1 ? "col-span-3 row-span-2" : "col-span-2 row-span-2") : shown.length === 2 && "row-span-2")}>
+                            <PlaceImage src={img.url} alt="" fill sizes={i === 0 ? "260px" : "130px"} className="object-cover transition-transform duration-500 group-hover:scale-105" />
                           </span>
                         ))
                       ) : (
