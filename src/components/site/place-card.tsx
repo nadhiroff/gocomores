@@ -3,6 +3,7 @@ import { ArrowUpRight } from "lucide-react";
 import { CategoryIcon } from "@/components/site/category-icon";
 import { IslandBadge } from "@/components/site/island-badge";
 import { PlaceImage } from "@/components/site/place-image";
+import { PlacePlaceholder } from "@/components/site/place-placeholder";
 import { VerificationBadge } from "@/components/site/verification-badge";
 import type { PlaceCardData } from "@/lib/types";
 
@@ -20,9 +21,7 @@ export function PlaceCard({ place, priority = false }: { place: PlaceCardData; p
             className="object-cover transition-transform duration-500 group-hover:scale-105 motion-reduce:transition-none motion-reduce:group-hover:scale-100"
           />
         ) : (
-          <div className="grid h-full place-items-center text-muted-foreground">
-            <CategoryIcon name={place.category.icon} className="size-10" />
-          </div>
+          <PlacePlaceholder color={place.island.color} icon={place.category.icon} name={place.name} className="transition-transform duration-500 group-hover:scale-105 motion-reduce:group-hover:scale-100" />
         )}
         <span className="absolute left-3 top-3 inline-flex items-center gap-1.5 rounded-full bg-card/95 px-2.5 py-1 text-xs font-semibold text-foreground shadow-sm">
           <CategoryIcon name={place.category.icon} className="size-3.5" />
