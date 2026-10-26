@@ -1,31 +1,45 @@
 import { notFound } from "next/navigation";
-import { deletePlace, deletePlaceImage } from "@/actions/admin";
-import { PlaceForm } from "@/components/admin/place-form";
-import { PlaceImage } from "@/components/site/place-image";
-import { Button } from "@/components/ui/button";
+import { DeletePlaceButton } from "@/components/admin/delete-place-button";
+import { PlaceForm, type PlaceTab } from "@/components/admin/place-form";
+import { PageHeader, Pill } from "@/components/admin/ui";
 import { prisma } from "@/lib/db";
 import { getCategories, getIslands, getPlaceBySlug } from "@/lib/queries";
 
 export const dynamic = "force-dynamic";
 export const metadata = { title: "Admin — Modifier un lieu" };
 
-export default async function EditPlace({ params }: { params: Promise<{ id: string }> }) {
-  const { id } = await params;
+const TAB_IDS: PlaceTab[] = ["identite", "contenu", "pratique", "carte", "photos"];
+
+export default async function EditPlace({ params, searchParams }: { params: Promise<{ id: string }>; searchParams: Promise<{ onglet?: string }> }) {
+  const [{ id }, { onglet }] = await Promise.all([params, searchParams]);
   const pid = Number(id);
   if (!Number.isInteger(pid)) notFound();
-  const row = (await prisma.place.findUnique({ where: { id: pid }, select: { slug: true, googleMapsUrl: true, coverAlt: true, islandId: true, categoryId: true } })) as
-    | { slug: string; googleMapsUrl: string | null; coverAlt: string | null; islandId: number; categoryId: number }
+  const row = (await prisma.place.findUnique({ where: { id: pid }, select: { slug: true, googleMapsUrl: true, islandId: true, categoryId: true } })) as
+    | { slug: string; googleMapsUrl: string | null; islandId: number; categoryId: number }
     | null;
   if (!row) notFound();
   const [place, islands, categories] = await Promise.all([getPlaceBySlug(row.slug), getIslands(), getCategories()]);
   if (!place) notFound();
+  const initialTab = TAB_IDS.find((t) => t === onglet) ?? "identite";
 
   return (
     <>
-      <h1 className="mb-6 text-3xl font-bold">Modifier : {place.name}</h1>
+      <PageHeader
+        crumbs={[{ href: "/admin/lieux", label: "Lieux" }]}
+        title={place.name}
+        description={
+          <span className="flex flex-wrap items-center gap-2">
+            {place.island.localName} · {place.category.name}
+            {place.status === "VERIFIED" ? <Pill tone="green">Vérifié</Pill> : <Pill tone="yellow">À confirmer</Pill>}
+          </span>
+        }
+      />
       <PlaceForm
+        key={place.id}
         islands={islands}
         categories={categories}
+        initialTab={initialTab}
+        images={place.images.map((i) => ({ id: i.id, url: i.url, alt: i.alt }))}
         values={{
           id: place.id,
           name: place.name,
@@ -39,41 +53,16 @@ export default async function EditPlace({ params }: { params: Promise<{ id: stri
           googleMapsUrl: row.googleMapsUrl ?? "",
           status: place.status,
           verifiedAt: place.verifiedAt ? place.verifiedAt.toISOString().slice(0, 10) : "",
-          coverAlt: row.coverAlt ?? "",
           practical: place.practical,
         }}
       />
 
-      <section aria-labelledby="photos-actuelles" className="mt-12">
-        <h2 id="photos-actuelles" className="text-2xl font-bold">Photos actuelles</h2>
-        {place.images.length ? (
-          <ul className="mt-4 grid gap-4 sm:grid-cols-3">
-            {place.images.map((img) => (
-              <li key={img.id} className="rounded-xl border bg-card p-3">
-                <div className="relative aspect-[4/3] overflow-hidden rounded-lg bg-muted">
-                  <PlaceImage src={img.url} alt={img.alt} fill sizes="320px" className="object-cover" />
-                </div>
-                <p className="mt-2 text-sm text-muted-foreground">{img.alt}</p>
-                <form action={deletePlaceImage} className="mt-2">
-                  <input type="hidden" name="id" value={img.id} />
-                  <input type="hidden" name="placeId" value={place.id} />
-                  <Button type="submit" variant="destructive" size="sm">Supprimer cette photo</Button>
-                </form>
-              </li>
-            ))}
-          </ul>
-        ) : (
-          <p className="mt-3 text-muted-foreground">Aucune photo.</p>
-        )}
-      </section>
-
-      <section aria-labelledby="zone-danger" className="mt-12 rounded-xl border-2 border-destructive/50 p-6">
-        <h2 id="zone-danger" className="text-2xl font-bold">Supprimer ce lieu</h2>
-        <p className="mt-2 text-muted-foreground">Action définitive. Les avis liés sont conservés mais détachés du lieu.</p>
-        <form action={deletePlace} className="mt-4">
-          <input type="hidden" name="id" value={place.id} />
-          <Button type="submit" variant="destructive">Supprimer définitivement {place.name}</Button>
-        </form>
+      <section aria-labelledby="zone-danger" className="mt-12 flex flex-wrap items-center justify-between gap-4 rounded-2xl border-2 border-destructive/40 bg-card p-5 sm:p-6">
+        <div>
+          <h2 id="zone-danger" className="text-lg font-bold">Supprimer ce lieu</h2>
+          <p className="mt-1 text-sm text-muted-foreground">Action définitive : le lieu et ses photos disparaissent du site. Les avis liés sont conservés mais détachés du lieu.</p>
+        </div>
+        <DeletePlaceButton id={place.id} name={place.name} />
       </section>
     </>
   );
