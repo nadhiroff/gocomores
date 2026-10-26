@@ -103,6 +103,14 @@
   --color-ngazidja: var(--island-ngazidja);
   --color-ndzuwani: var(--island-ndzuwani);
   --color-mwali: var(--island-mwali);
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-muted: var(--sidebar-muted);
+  --color-sidebar-active: var(--sidebar-active);
+  --color-flag-yellow: var(--flag-yellow);
+  --color-flag-red: var(--flag-red);
+  --color-flag-blue: var(--flag-blue);
+  --color-flag-green: var(--flag-green);
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);
@@ -308,4 +316,106 @@
 .leaflet-marker-icon:focus-visible .gc-marker {
   outline: 3px solid var(--ring);
   outline-offset: 3px;
+}
+
+/*
+ * Thème de l'administration — couleurs du drapeau des Comores.
+ * Jaune #FFD100 · blanc · rouge #EF3340 · bleu #003DA5 · vert #009639.
+ * Les nuances sont assombries ou éclaircies pour garder un contraste WCAG AA sur le texte.
+ */
+.admin-theme {
+  --background: #f5f7f4;
+  --foreground: #13221a;
+  --card: #ffffff;
+  --card-foreground: #13221a;
+  --popover: #ffffff;
+  --popover-foreground: #13221a;
+  --primary: #007a2f;
+  --primary-foreground: #ffffff;
+  --secondary: #eaf5ee;
+  --secondary-foreground: #0d4a24;
+  --muted: #eef2ee;
+  --muted-foreground: #4b5a51;
+  --accent: #e3f1e8;
+  --accent-foreground: #0d4a24;
+  --cta: #ffd100;
+  --cta-foreground: #1a1600;
+  --destructive: #c8102e;
+  --destructive-foreground: #ffffff;
+  --border: #dde4de;
+  --input: #7f9285;
+  --ring: #003da5;
+  --link: #003da5;
+  --flag-yellow: #ffd100;
+  --flag-red: #ef3340;
+  --flag-blue: #003da5;
+  --flag-green: #009639;
+  --sidebar: #0b3d1f;
+  --sidebar-foreground: #e6f4ea;
+  --sidebar-muted: #9cc5aa;
+  --sidebar-active: #145c31;
+}
+
+.dark .admin-theme {
+  --background: #0c1410;
+  --foreground: #e6efe8;
+  --card: #131f18;
+  --card-foreground: #e6efe8;
+  --popover: #131f18;
+  --popover-foreground: #e6efe8;
+  --primary: #3fcf74;
+  --primary-foreground: #06200f;
+  --secondary: #183022;
+  --secondary-foreground: #d4f0dd;
+  --muted: #17241c;
+  --muted-foreground: #a3b4a9;
+  --accent: #1c3326;
+  --accent-foreground: #e6efe8;
+  --cta: #ffd100;
+  --cta-foreground: #1a1600;
+  --destructive: #ff6b7a;
+  --destructive-foreground: #2a0006;
+  --border: #253a2e;
+  --input: #61796a;
+  --ring: #7ea7ff;
+  --link: #8fb3ff;
+  --sidebar: #08130d;
+  --sidebar-foreground: #e6f4ea;
+  --sidebar-muted: #8fb39b;
+  --sidebar-active: #173a25;
+}
+
+.admin-theme select {
+  color-scheme: light;
+}
+.dark .admin-theme select {
+  color-scheme: dark;
+}
+.dark .admin-theme select option {
+  color: #e6efe8;
+  background-color: #131f18;
+}
+.admin-theme h1,
+.admin-theme h2,
+.admin-theme h3 {
+  font-family: var(--font-sans);
+  letter-spacing: -0.015em;
+}
+
+/* Bande aux quatre couleurs du drapeau. */
+.flag-stripe {
+  background: linear-gradient(
+    90deg,
+    var(--flag-yellow, #ffd100) 0 25%,
+    #ffffff 25% 50%,
+    var(--flag-red, #ef3340) 50% 75%,
+    var(--flag-blue, #003da5) 75% 100%
+  );
+}
+.dark .flag-stripe {
+  background: linear-gradient(90deg, #ffd100 0 25%, #e5e7eb 25% 50%, #ef3340 50% 75%, #3b6fd6 75% 100%);
+}
+/* La bande blanche disparaît sur fond blanc : on la borde d'un filet. */
+.flag-stripe {
+  box-shadow: inset 0 -1px 0 rgb(0 0 0 / 0.06);
 }

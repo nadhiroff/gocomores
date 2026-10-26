@@ -1,6 +1,6 @@
 import { deleteAdminUser, toggleAdminUser } from "@/actions/admin";
 import { ChangePasswordForm, CreateAdminForm } from "@/components/admin/admin-user-forms";
-import { Badge } from "@/components/ui/badge";
+import { PageHeader, Panel, Pill } from "@/components/admin/ui";
 import { Button } from "@/components/ui/button";
 import { requireAdmin } from "@/lib/admin";
 import { prisma } from "@/lib/db";
@@ -16,11 +16,11 @@ export default async function AdminUsers() {
   const fmt = new Intl.DateTimeFormat("fr-FR", { dateStyle: "medium", timeStyle: "short" });
   return (
     <>
-      <h1 className="text-3xl font-bold">Administrateurs ({users.length})</h1>
-      <div className="relative mt-6 overflow-x-auto rounded-xl border bg-card">
+      <PageHeader title="Utilisateurs" description={`${users.length} administrateur${users.length > 1 ? "s" : ""} peuvent gérer le site.`} />
+      <div className="relative overflow-x-auto rounded-2xl border bg-card">
         <table className="w-full min-w-[44rem] text-left text-sm">
           <caption className="sr-only">Liste des administrateurs</caption>
-          <thead className="border-b bg-muted/60">
+          <thead className="border-b bg-muted/60 text-xs uppercase tracking-wide text-muted-foreground">
             <tr>
               <th scope="col" className="p-3">Nom</th>
               <th scope="col" className="p-3">E-mail</th>
@@ -34,7 +34,7 @@ export default async function AdminUsers() {
               <tr key={u.id}>
                 <th scope="row" className="p-3 font-semibold">{u.name}{u.id === me.adminId && <span className="font-normal text-muted-foreground"> (vous)</span>}</th>
                 <td className="p-3">{u.email}</td>
-                <td className="p-3"><Badge variant={u.active ? "verified" : "toConfirm"}>{u.active ? "Actif" : "Désactivé"}</Badge></td>
+                <td className="p-3"><Pill tone={u.active ? "green" : "yellow"}>{u.active ? "Actif" : "Désactivé"}</Pill></td>
                 <td className="p-3">{u.lastLoginAt ? fmt.format(u.lastLoginAt) : "Jamais"}</td>
                 <td className="p-3">
                   {u.id !== me.adminId && (
@@ -45,7 +45,7 @@ export default async function AdminUsers() {
                       </form>
                       <form action={deleteAdminUser}>
                         <input type="hidden" name="id" value={u.id} />
-                        <Button type="submit" variant="destructive" size="sm">Supprimer<span className="sr-only"> {u.email}</span></Button>
+                        <Button type="submit" variant="ghost" size="sm" className="text-destructive hover:bg-destructive/10">Supprimer<span className="sr-only"> {u.email}</span></Button>
                       </form>
                     </div>
                   )}
@@ -57,15 +57,13 @@ export default async function AdminUsers() {
       </div>
       <p className="mt-3 text-sm text-muted-foreground">Il reste toujours au moins un administrateur actif : le dernier ne peut être ni désactivé ni supprimé.</p>
 
-      <div className="mt-10 grid gap-8 lg:grid-cols-2">
-        <section aria-labelledby="ajout" className="rounded-xl border bg-card p-6">
-          <h2 id="ajout" className="mb-4 text-2xl font-bold">Ajouter un administrateur</h2>
+      <div className="mt-8 grid gap-6 lg:grid-cols-2">
+        <Panel title="Ajouter un administrateur" id="ajout">
           <CreateAdminForm />
-        </section>
-        <section aria-labelledby="mdp" className="rounded-xl border bg-card p-6">
-          <h2 id="mdp" className="mb-4 text-2xl font-bold">Mon mot de passe</h2>
+        </Panel>
+        <Panel title="Mon mot de passe" id="mdp">
           <ChangePasswordForm />
-        </section>
+        </Panel>
       </div>
     </>
   );

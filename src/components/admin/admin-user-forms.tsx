@@ -40,7 +40,7 @@ export function CreateAdminForm() {
         <Input id="n-pass" name="password" type="password" autoComplete="new-password" required minLength={12} aria-invalid={!!e.password} />
         <FieldError id="n-pass-e" errors={e.password} />
       </div>
-      <Button type="submit" variant="cta" disabled={pending}>{pending ? "Création…" : "Créer l'administrateur"}</Button>
+      <Button type="submit" disabled={pending}>{pending ? "Création…" : "Créer l'administrateur"}</Button>
     </form>
   );
 }
@@ -66,7 +66,7 @@ export function ChangePasswordForm() {
         <Input id="c-conf" name="confirm" type="password" autoComplete="new-password" required aria-invalid={!!e.confirm} />
         <FieldError id="c-conf-e" errors={e.confirm} />
       </div>
-      <Button type="submit" disabled={pending}>{pending ? "Enregistrement…" : "Changer mon mot de passe"}</Button>
+      <Button type="submit" variant="secondary" disabled={pending}>{pending ? "Enregistrement…" : "Changer mon mot de passe"}</Button>
     </form>
   );
 }
