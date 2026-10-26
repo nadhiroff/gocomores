@@ -19,7 +19,7 @@ export function Logo({ className, light = false }: { className?: string; light?:
     <Link href="/" className={cn("inline-flex min-h-11 items-center gap-2.5 rounded-lg", className)} aria-label="GoComores — accueil">
       <LogoMark />
       <span className={cn("font-serif text-xl font-bold tracking-tight", light ? "text-white" : "text-foreground")}>
-        Go<span className={light ? "text-[#FDBA74]" : "text-[var(--island-ngazidja)]"}>Comores</span>
+        Go<span className={light ? "text-[#FFD100]" : "text-[var(--island-ngazidja)]"}>Comores</span>
       </span>
     </Link>
   );
