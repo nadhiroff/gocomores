@@ -63,7 +63,7 @@ export default async function AdminMedia({ searchParams }: { searchParams: Promi
             <Button asChild size="sm" variant={onlyEmpty ? "secondary" : "ghost"}><Link href="/admin/medias?filtre=sans-photo" aria-current={onlyEmpty ? "true" : undefined}>Sans photo ({withoutPhoto})</Link></Button>
           </div>
           {list.length ? (
-            <ul className="admin-stagger grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
+            <ul className="admin-stagger grid gap-4 sm:grid-cols-2 lg:gap-6 xl:grid-cols-3 2xl:grid-cols-4">
               {list.map((r) => (
                 <li key={r.id}>
                   <Link href={`/admin/medias?lieu=${r.id}`} className="admin-lift group block overflow-hidden rounded-2xl border bg-card hover:border-primary/60">

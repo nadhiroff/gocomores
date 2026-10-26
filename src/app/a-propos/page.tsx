@@ -42,7 +42,7 @@ export default async function AProposPage() {
 
         <section aria-labelledby="engagements">
           <h2 id="engagements" className="text-3xl font-bold">Nos engagements</h2>
-          <ul className="mt-6 grid gap-5 md:grid-cols-3">
+          <ul className="mt-6 grid gap-5 md:grid-cols-3 lg:gap-8">
             <li className="rounded-xl border bg-card p-6">
               <BadgeCheck className="size-7 text-[var(--island-mwali)]" aria-hidden="true" />
               <h3 className="mt-3 text-xl font-semibold">Fiabilité</h3>

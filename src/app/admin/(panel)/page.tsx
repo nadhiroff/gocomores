@@ -59,14 +59,14 @@ export default async function AdminDashboard() {
         }
       />
 
-      <div className="admin-stagger grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+      <div className="admin-stagger grid gap-4 sm:grid-cols-2 lg:gap-6 xl:grid-cols-4">
         <StatCard label="Lieux publiés" value={places.length} icon={MapPin} tone="green" href="/admin/lieux" hint={`${verified} vérifié${verified > 1 ? "s" : ""}`} />
         <StatCard label="Photos" value={imageCount as number} icon={Images} tone="blue" href="/admin/medias" hint={`${noPhoto.length} lieu${noPhoto.length > 1 ? "x" : ""} sans photo`} />
         <StatCard label="Avis" value={agg._count} icon={Star} tone="yellow" href="/admin/avis" hint={agg._avg.rating ? `Note moyenne ${agg._avg.rating.toFixed(1).replace(".", ",")} / 5` : "Aucune note"} />
         <StatCard label="Messages" value={messageCount as number} icon={Mail} tone="red" href="/admin/messages" hint={`${newMessages as number} cette semaine`} />
       </div>
 
-      <div className="admin-stagger mt-6 grid gap-6 lg:grid-cols-5">
+      <div className="admin-stagger mt-6 grid gap-6 lg:grid-cols-5 lg:gap-8">
         <Panel title="À traiter" id="todo" description="Les lieux qui méritent votre attention en priorité." className="lg:col-span-3">
           {todo.length ? (
             <ul className="divide-y">
