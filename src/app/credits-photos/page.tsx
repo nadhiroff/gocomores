@@ -21,7 +21,7 @@ export default function CreditsPhotosPage() {
         </p>
       </PageHero>
       <div className="container-page py-14">
-        <ul className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+        <ul className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 lg:gap-8 2xl:grid-cols-4">
           {PHOTO_CREDITS.map((c) => (
             <li key={c.src} className="overflow-hidden rounded-xl border bg-card">
               <div className="relative aspect-[4/3] bg-muted">

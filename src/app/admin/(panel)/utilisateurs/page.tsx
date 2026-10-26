@@ -57,7 +57,7 @@ export default async function AdminUsers() {
       </div>
 
       <h2 className="mb-4 mt-10 text-lg font-bold">Équipe</h2>
-      <ul className="admin-stagger grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
+      <ul className="admin-stagger grid gap-4 sm:grid-cols-2 lg:gap-6 xl:grid-cols-3 2xl:grid-cols-4">
         {users.map((u) => {
           const look = AVATARS[(u.id - 1) % AVATARS.length];
           const isMe = u.id === me.adminId;

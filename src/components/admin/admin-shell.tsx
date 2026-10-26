@@ -149,7 +149,7 @@ export function AdminShell({ userName, counts, children }: { userName: string; c
 
       <div className="lg:pl-72">
         {/* La clé relance l'animation d'entrée à chaque changement de page. */}
-        <div key={pathname} className="admin-page mx-auto w-full max-w-6xl px-4 pb-16 pt-6 sm:px-6 lg:px-10 lg:pt-10">{children}</div>
+        <div key={pathname} className="admin-page mx-auto w-full max-w-[96rem] px-4 pb-16 pt-6 sm:px-6 lg:px-10 lg:pt-10 2xl:px-14">{children}</div>
       </div>
     </div>
   );

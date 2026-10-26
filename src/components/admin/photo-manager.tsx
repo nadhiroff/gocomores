@@ -218,7 +218,7 @@ export function PhotoManager({ placeId, placeName, initial }: { placeId: number;
           <p className="text-sm text-muted-foreground">
             Glissez les photos pour changer leur ordre (ou utilisez les flèches). La <strong className="text-foreground">première photo est la couverture</strong> affichée sur le site.
           </p>
-          <ul className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
+          <ul className="grid gap-4 sm:grid-cols-2 lg:gap-6 xl:grid-cols-3 2xl:grid-cols-4">
             {images.map((img, index) => (
               <li
                 key={img.id}
