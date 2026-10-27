@@ -51,7 +51,7 @@ export default async function ContactPage({ searchParams }: { searchParams: Prom
                   <c.icon className="size-6 text-[var(--island-ngazidja)]" aria-hidden="true" />
                   <h3 className="mt-3 font-sans text-lg font-bold">{c.title}</h3>
                   <p className="mt-1.5 text-sm text-muted-foreground">{c.text}</p>
-                  <Link href={`/contact?sujet=${c.id}#formulaire`} className="mt-2 inline-flex min-h-11 items-center text-sm font-semibold text-link underline underline-offset-4">
+                  <Link prefetch={false} href={`/contact?sujet=${c.id}#formulaire`} className="mt-2 inline-flex min-h-11 items-center text-sm font-semibold text-link underline underline-offset-4">
                     Écrire sur ce sujet<span className="sr-only"> : {c.title}</span>
                   </Link>
                 </li>

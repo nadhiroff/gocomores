@@ -99,13 +99,13 @@ export default async function DestinationsPage({ searchParams }: { searchParams:
         <nav aria-label="Filtrer par île" className="mt-5">
           <ul className="flex flex-wrap gap-2">
             <li>
-              <Link href={chipHref()} aria-current={!ile ? "true" : undefined} className={cn(chip, !ile ? "border-primary bg-primary text-primary-foreground" : "bg-card hover:bg-accent")}>
+              <Link prefetch={false} href={chipHref()} aria-current={!ile ? "true" : undefined} className={cn(chip, !ile ? "border-primary bg-primary text-primary-foreground" : "bg-card hover:bg-accent")}>
                 Toutes
               </Link>
             </li>
             {islands.map((i) => (
               <li key={i.id}>
-                <Link href={chipHref(i.slug)} aria-current={ile === i.slug ? "true" : undefined} className={cn(chip, ile === i.slug ? "border-primary bg-primary text-primary-foreground" : "bg-card hover:bg-accent")}>
+                <Link prefetch={false} href={chipHref(i.slug)} aria-current={ile === i.slug ? "true" : undefined} className={cn(chip, ile === i.slug ? "border-primary bg-primary text-primary-foreground" : "bg-card hover:bg-accent")}>
                   {i.localName}
                 </Link>
               </li>
