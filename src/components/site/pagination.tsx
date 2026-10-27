@@ -15,7 +15,7 @@ export function Pagination({ page, pages, basePath, params = {} }: { page: numbe
   return (
     <nav aria-label="Pagination" className="mt-8 flex flex-wrap items-center justify-center gap-2">
       {page > 1 && (
-        <Link href={href(page - 1)} rel="prev" className={cn(btn, "bg-card hover:bg-accent")}>
+        <Link prefetch={false} href={href(page - 1)} rel="prev" className={cn(btn, "bg-card hover:bg-accent")}>
           <ChevronLeft className="size-4" aria-hidden="true" />
           <span className="sr-only sm:not-sr-only sm:ml-1">Précédent</span>
         </Link>
@@ -24,6 +24,7 @@ export function Pagination({ page, pages, basePath, params = {} }: { page: numbe
         <span key={p} className="contents">
           {i > 0 && items[i - 1] !== p - 1 && <span aria-hidden="true" className="px-1 text-muted-foreground">…</span>}
           <Link
+            prefetch={false}
             href={href(p)}
             aria-current={p === page ? "page" : undefined}
             aria-label={`Page ${p}`}
@@ -34,7 +35,7 @@ export function Pagination({ page, pages, basePath, params = {} }: { page: numbe
         </span>
       ))}
       {page < pages && (
-        <Link href={href(page + 1)} rel="next" className={cn(btn, "bg-card hover:bg-accent")}>
+        <Link prefetch={false} href={href(page + 1)} rel="next" className={cn(btn, "bg-card hover:bg-accent")}>
           <span className="sr-only sm:not-sr-only sm:mr-1">Suivant</span>
           <ChevronRight className="size-4" aria-hidden="true" />
         </Link>

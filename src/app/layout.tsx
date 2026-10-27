@@ -3,7 +3,6 @@ import { ThemeProvider } from "next-themes";
 import { Header } from "@/components/site/header";
 import { Footer } from "@/components/site/footer";
 import { SafetyBanner } from "@/components/site/safety-banner";
-import { ScrollHoverGuard } from "@/components/site/scroll-hover-guard";
 import { SiteChrome } from "@/components/site/site-chrome";
 import { SITE } from "@/lib/site";
 import "./globals.css";
@@ -45,7 +44,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           >
             Aller au contenu
           </a>
-          <ScrollHoverGuard />
           <SiteChrome header={<Header />} footer={<Footer />} banner={<SafetyBanner />}>
             <main id="contenu" tabIndex={-1} className="focus:outline-none">
               {children}

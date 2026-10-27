@@ -1,26 +1,34 @@
 "use client";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 
-/** Compteur animé : la valeur finale est rendue côté serveur (SEO, sans JS) ; l'animation est coupée si prefers-reduced-motion. */
+/**
+ * Compteur animé : la valeur finale est rendue côté serveur (SEO, sans JS) ; l'animation est coupée si prefers-reduced-motion.
+ * Les chiffres sont écrits directement dans le DOM à chaque image : pas de rendu React par image.
+ */
 export function CountUp({ value, suffix = "", duration = 1200 }: { value: number; suffix?: string; duration?: number }) {
-  const [shown, setShown] = useState(value);
   const ref = useRef<HTMLSpanElement>(null);
 
   useEffect(() => {
     const el = ref.current;
     if (!el || window.matchMedia("(prefers-reduced-motion: reduce)").matches || value === 0) return;
+    const format = (n: number) => `${n.toLocaleString("fr-FR")}${suffix}`;
     let raf = 0;
     const io = new IntersectionObserver(
       (entries) => {
         if (!entries[0].isIntersecting) return;
         io.disconnect();
         const start = performance.now();
+        let last = -1;
         const tick = (now: number) => {
           const t = Math.min(1, (now - start) / duration);
-          setShown(Math.round(value * (1 - Math.pow(1 - t, 3))));
+          const n = Math.round(value * (1 - Math.pow(1 - t, 3)));
+          if (n !== last) {
+            el.textContent = format(n);
+            last = n;
+          }
           if (t < 1) raf = requestAnimationFrame(tick);
         };
-        setShown(0);
+        el.textContent = format(0);
         raf = requestAnimationFrame(tick);
       },
       { threshold: 0.4 },
@@ -29,13 +37,11 @@ export function CountUp({ value, suffix = "", duration = 1200 }: { value: number
     return () => {
       io.disconnect();
       cancelAnimationFrame(raf);
+      el.textContent = format(value);
     };
-  }, [value, duration]);
+  }, [value, suffix, duration]);
 
   return (
-    <span ref={ref}>
-      {shown.toLocaleString("fr-FR")}
-      {suffix}
-    </span>
+    <span ref={ref}>{`${value.toLocaleString("fr-FR")}${suffix}`}</span>
   );
 }
