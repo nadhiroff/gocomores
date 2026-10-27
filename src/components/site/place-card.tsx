@@ -31,7 +31,9 @@ export function PlaceCard({ place, priority = false }: { place: PlaceCardData; p
       <div className="flex flex-1 flex-col gap-3 p-5">
         <IslandBadge island={place.island} showLocal={false} />
         <h3 className="font-serif text-xl font-semibold leading-snug">
+          {/* Pas de préchargement automatique : une page de lieux affiche jusqu'à 18 cartes (pages pré-générées, rapides au clic). */}
           <Link
+            prefetch={false}
             href={`/destinations/${place.slug}`}
             className="after:absolute after:inset-0 after:content-[''] focus-visible:outline-offset-4"
           >
